@@ -15,6 +15,8 @@ class Scene:
     angles: tuple = config.DEFAULT_ANGLES
     position: tuple = (0.0, 0.0, config.DEFAULT_DEPTH)
     scale: float = 1.0
+    projection: str = "Perspective"
+    axes_visible: bool = True
 
     def rotate(self, dx=0.0, dy=0.0, dz=0.0):
         self.angles = tuple((angle + change) % tau for angle, change

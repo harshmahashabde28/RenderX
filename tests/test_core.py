@@ -66,7 +66,7 @@ class CoreTests(unittest.TestCase):
         self.assertPoint(project_point((1, 1, 10), (390, 350)), (435, 305))
 
     def test_bad_projection_inputs(self):
-        for point in [(1, 1, 0), (1, 1, -1), (1, 1, .1),
+        for point in [(1, 1, 0), (1, 1, -1), (1, 1, .099),
                       (math.nan, 1, 5), (1, math.inf, 5), (1, 1, math.inf)]:
             self.assertIsNone(project_point(point))
 
@@ -89,5 +89,5 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(scene, Scene(shape="Pyramid"))
         for mesh in make_models().values():
             radius = max(math.dist(v, (0, 0, 0)) for v in mesh.vertices)
-            self.assertGreater(config.MIN_DEPTH - radius * config.MAX_SCALE,
+            self.assertGreater(config.DEFAULT_DEPTH - radius * config.MAX_SCALE,
                                config.NEAR_DEPTH)

@@ -1,351 +1,277 @@
 # RenderX
 
-### A 3D Wireframe Rendering Engine Built from Scratch Using Python and Pygame
+A beginner-friendly **3D wireframe rendering engine** built with Python and Pygame.
+Explore built-in shapes and a sample OBJ house using keyboard and mouse.
 
-RenderX is a lightweight 3D wireframe rendering engine developed from scratch using **Python and Pygame**.
+## Overview
 
-The project demonstrates the basic 3D rendering pipeline by representing objects as vertices and edges, applying 3D transformations, projecting the transformed coordinates onto a 2D screen, and drawing the resulting wireframe in real time.
+RenderX demonstrates the fundamentals of a 3D graphics pipeline. Pygame supplies
+the window, input and 2D drawing; plain Python and `math` supply the 3D calculations.
+This is the working MVP for **Milestone 3: Implementation / Development**.
+It is an offline desktop application: no database, server, account or API key.
 
-This is the **first working version of RenderX** and serves as the foundation for all later versions of the project.
+## Features
 
----
+- Cube (8 vertices / 12 edges), square pyramid (5 / 8), rectangular prism (8 / 12).
+- Rotation on X/Y/Z; translation on X/Y/Z; uniform scaling.
+- Perspective/orthographic toggle, world-direction axes and near-plane clipping.
+- Basic OBJ loading with centring/normalization; timestamped PNG screenshots.
+- Keyboard controls, mouse gestures and clickable shape/reset/exit buttons.
+- Live transform values, instructions and FPS in a dark control panel.
+- Bounded movement/scaling, safe depth checks and focus-loss protection.
+- Frame-rate-independent keyboard updates and a nominal 60 FPS frame limit.
+- Pygame is the only external dependency; no NumPy or external 3D engine.
 
-## Version 1
+## How It Works
 
-**Version:** 1.0 / Checkpoint 1  
-**Window:** 1120 × 740  
-**Language:** Python  
-**Graphics Library:** Pygame  
-**Tests:** 24 automated tests
+**3D model → transformations → camera-relative coordinates → perspective
+projection → 2D coordinates → wireframe rendering.**
 
----
+Each frame starts with original vertices, scales them, rotates around X then Y
+then Z, and translates them. Camera position is subtracted. Each edge is clipped in camera space before its endpoints are
+projected and drawn with `pygame.draw.line()`.
+Original vertices never change.
 
-## What RenderX Can Do
-
-The first version provides a complete small interactive wireframe renderer.
-
-### Built-in 3D Models
-
-RenderX includes three basic wireframe models:
-
-- Cube
-- Pyramid
-- Rectangular Prism
-
-Each model is represented using:
-
-- 3D vertices
-- Indexed edges
-
-The original model geometry is preserved while transformations are calculated from the original coordinates each frame.
-
----
-
-## 3D Transformations
-
-RenderX performs the main geometric transformations directly in Python.
-
-### Rotation
-
-Objects can be rotated around all three axes:
-
-- X-axis
-- Y-axis
-- Z-axis
-
-### Translation
-
-Objects can be moved in 3D space along their position coordinates.
-
-### Scaling
-
-Objects can be uniformly enlarged or reduced.
-
----
-
-## Perspective Projection
-
-The renderer converts 3D coordinates into 2D screen coordinates using **perspective projection**.
-
-Points farther from the camera appear smaller, allowing the wireframe to visually represent depth.
-
-The basic rendering pipeline is:
+## Project Structure
 
 ```text
-3D Model
-   ↓
-Scale
-   ↓
-Rotate X
-   ↓
-Rotate Y
-   ↓
-Rotate Z
-   ↓
-Translate
-   ↓
-Perspective Projection
-   ↓
-2D Screen Coordinates
-   ↓
-Draw Edges with Pygame
+RenderX/
+├── main.py                 # Entry point and startup diagnostics
+├── renderx/
+│   ├── __init__.py
+│   ├── app.py              # Window, frame loop and shutdown
+│   ├── config.py           # Colours, speeds and safety limits
+│   ├── mesh.py             # Vertex/edge container and validation
+│   ├── models.py           # Built-in shape data
+│   ├── scene.py            # Current pose and shared actions
+│   ├── transform.py        # Scale, rotation and translation
+│   ├── camera.py           # Camera coordinates and two projections
+│   ├── axes.py             # Labelled world-direction reference axes
+│   ├── obj_loader.py       # Read, validate and normalize OBJ geometry
+│   ├── clipping.py         # Near-plane segment intersection
+│   ├── screenshots.py      # Save PNGs without overwriting
+│   ├── renderer.py         # Project vertices and draw edges
+│   ├── input.py            # Keyboard/mouse routing and focus handling
+│   └── ui.py               # Status, instructions and buttons
+├── assets/models/house.obj # Sample polygonal model
+├── screenshots/            # Created on F12; ignored by Git
+├── tests/
+│   ├── test_core.py        # Maths and safety tests
+│   ├── test_interaction.py # Input, drawing and lifecycle tests
+│   └── test_extensions.py  # Projections, axes, OBJ, clipping and PNG tests
+├── requirements.txt
+├── .gitignore
+└── README.md
 ```
 
-The actual 3D calculations are performed by RenderX rather than by a 3D engine.
+The ZIP also includes separate `College-Notes/` with test evidence, viva help and
+updated project notes. These sit outside the Git repository for use in Obsidian.
 
----
+## Installation
 
-## Interaction
+Extract the ZIP. Open a terminal **inside `RenderX`**, where `main.py` is located.
+Use Python 3.10 or newer. Tested with Python 3.12.14 and Pygame 2.6.1 on Linux
+using SDL's headless display driver. Interactive use requires a normal desktop.
+Physical Windows keyboard/mouse testing is still pending.
 
-The first version supports both keyboard and mouse interaction.
+### Windows PowerShell
 
-### Keyboard Controls
-
-| Key | Action |
-|---|---|
-| `1` | Select Cube |
-| `2` | Select Pyramid |
-| `3` | Select Rectangular Prism |
-| Arrow Keys | Rotate around X/Y |
-| `Q / E` | Rotate around Z |
-| `W / A / S / D` | Move the object |
-| `Page Up / Page Down` | Move object in depth |
-| `+ / =` | Increase scale |
-| `-` | Decrease scale |
-| `R` | Reset transformation |
-| `Esc` | Exit |
-
-### Mouse Controls
-
-| Input | Action |
-|---|---|
-| Left Mouse Drag | Rotate X/Y |
-| Right Mouse Drag | Rotate Z |
-| `Shift` + Left Drag | Move/Pan |
-| Middle Mouse Drag | Move/Pan |
-| Mouse Wheel | Scale |
-
-The application also includes on-screen controls and a small HUD showing information about the current scene.
-
----
-
-## Architecture
-
-The first version follows a simple rendering architecture:
-
-```text
-             User Input
-                 ↓
-          Application Loop
-                 ↓
-             Scene State
-                 ↓
-        Transformation System
-                 ↓
-         Camera / Projection
-                 ↓
-             Renderer
-                 ↓
-          Pygame Window
+```powershell
+py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe main.py
 ```
 
-### Main Components
+No environment activation is needed. If `py` is unavailable but `python` works,
+use `python -m venv .venv` first. In VS Code select `.venv\Scripts\python.exe`
+as your interpreter; run through the terminal if Code Runner selects another one.
 
-**Application**
-
-Controls the main Pygame loop, initialization, updates and shutdown.
-
-**Input**
-
-Processes keyboard and mouse interaction and converts user actions into scene changes.
-
-**Scene**
-
-Stores the currently selected model and its transformation state.
-
-**Mesh / Model Data**
-
-Stores vertices and edges describing the wireframe geometry.
-
-**Transformation System**
-
-Performs scaling, X/Y/Z rotation and translation.
-
-**Camera**
-
-Converts 3D coordinates into 2D screen coordinates using perspective projection.
-
-**Renderer**
-
-Draws the projected edges as lines using Pygame.
-
----
-
-## Core Rendering Concept
-
-RenderX does not use a ready-made 3D engine.
-
-Instead, the project follows the basic idea:
-
-```text
-Vertices + Edges
-       ↓
-3D Transformations
-       ↓
-Camera Projection
-       ↓
-2D Points
-       ↓
-Connected Lines
-```
-
-For every frame, the renderer starts from the original model coordinates and calculates the transformed position of the object again.
-
-This prevents repeated transformations from permanently modifying the original mesh.
-
----
-
-## Technology Stack
-
-| Technology | Purpose |
-|---|---|
-| Python | Programming language and mathematical calculations |
-| Pygame | Window, input handling and 2D line rendering |
-| Python `math` | Rotation and projection calculations |
-| VS Code | Development environment |
-| Git / GitHub | Source-code version control |
-
-RenderX is designed to run locally and does not require a server, database, API or internet connection.
-
----
-
-## Project Scope
-
-The first version intentionally focuses on the fundamental wireframe rendering pipeline.
-
-### Included
-
-- 3D vertex and edge representation
-- Cube, pyramid and rectangular prism
-- X/Y/Z rotation
-- Translation
-- Uniform scaling
-- Perspective projection
-- Real-time rendering
-- Keyboard controls
-- Mouse controls
-- Model switching
-- Reset functionality
-- HUD / controls panel
-- Automated testing
-
-### Not Included
-
-The following were intentionally outside the scope of this first version:
-
-- Textures
-- Lighting
-- Shadows
-- Materials
-- Filled polygon rendering
-- OpenGL or another GPU rendering backend
-- Physics
-- Collision systems
-- Full scene editor
-- Advanced camera systems
-- Large external model pipelines
-- OBJ model loading
-- Orthographic projection
-- Near-plane clipping
-- Educational laboratory features
-
-These limitations define the boundary of the original RenderX release and were later addressed selectively in subsequent versions.
-
----
-
-## Testing
-
-The first working version contains **24 automated tests** covering the core functionality.
-
-Testing focused on areas such as:
-
-- Transformation mathematics
-- Projection behaviour
-- Model geometry
-- Input handling
-- Scene state
-- Scaling limits
-- Reset behaviour
-- Rendering-related safety
-
-The automated tests provide a repeatable way to verify the mathematical and programmatic behaviour of the renderer.
-
-A separate physical laptop test is also required for verifying actual keyboard, mouse and display behaviour.
-
----
-
-## Running RenderX
-
-### Requirements
-
-- Python 3
-- Pygame
-
-### Install Dependencies
+### Linux / macOS
 
 ```bash
-pip install -r requirements.txt
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python main.py
 ```
 
-### Run
+With your intended Python environment already active:
 
 ```bash
+python -m pip install -r requirements.txt
 python main.py
 ```
 
-### Run Tests
+After publishing your own repository, you can clone instead of extracting:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/RenderX.git
+cd RenderX
+python -m pip install -r requirements.txt
+python main.py
+```
+
+Replace `YOUR_USERNAME`; this is a placeholder, not a verified existing remote.
+
+## Controls
+
+| Action | Keyboard | Mouse |
+|---|---|---|
+| Rotate X | Up / Down | Left-drag vertically |
+| Rotate Y | Right / Left | Left-drag horizontally |
+| Rotate Z | E / Q | Right-drag horizontally |
+| Move up / down | W / S | Shift + left-drag or middle-drag |
+| Move left / right | A / D | Shift + left-drag or middle-drag |
+| Move nearer / farther | Page Up / Page Down | — |
+| Enlarge / shrink | + or equals / minus; numpad supported | Scroll up / down |
+| Cube / pyramid / prism | 1 / 2 / 3 | Click shape button |
+| Toggle projection | P | — |
+| Toggle world axes | X | — |
+| Load / reload sample OBJ | O | — |
+| Save screenshot | F12 | — |
+| Reset current shape | R | Click Reset |
+| Exit | Esc | Click Exit or close window |
+
+Hold movement keys; opposite keys cancel. Selecting a shape resets its pose.
+Reset retains the selected shape. Gestures start only in the drawing area;
+leaving it cancels dragging. Losing focus cancels dragging and pauses key updates.
+Wheel input over the panel is ignored.
+
+W/S retain the approved design's vertical movement mapping; Page Up/Down add
+depth movement. The camera itself is fixed. X/Y position is bounded to ±1 world
+unit, depth to -3–10, and scale to 0.3–1.3. Extreme close-ups can extend beyond
+the viewport; Reset recovers the default view.
+
+## 3D Mathematics
+
+- **Vertices:** local `(x, y, z)` corner positions.
+- **Edges:** index pairs, e.g. `(0, 1)` connects the first two vertices.
+- **Scaling:** multiply all coordinates by the same positive number.
+- **Rotation:** use sine/cosine. Z rotation gives `x_new = x*cos(a) - y*sin(a)`
+  and `y_new = x*sin(a) + y*cos(a)`.
+- **Translation:** add the object position after rotating.
+- **Camera:** subtract camera position from world coordinates.
+- **Perspective:** `screen_x = centre_x + focal_length*x/z` and
+  `screen_y = centre_y - focal_length*y/z`. Double depth gives half the offset.
+  The minus sign converts upward world Y to downward screen Y.
+
+Angles use radians internally and degrees in the panel. Order matters:
+scale → rotate X → rotate Y → rotate Z → translate. Translating before rotation
+would rotate the object's position too, making it orbit the origin.
+
+Points below depth 0.1 and non-finite points are not projected. Before projection,
+each edge is clipped against z = 0.1 in camera space. An edge crossing that plane
+is shortened to its intersection rather than discarded. Points exactly on the
+plane remain valid. Objects can now cross the camera using Page Up/Down;
+completely hidden objects can always be recovered with R.
+2D drawing is clipped to the viewport to protect the panel. Rear edges remain
+visible because hidden-surface removal is outside this wireframe MVP.
+
+## Tests
+
+With the intended environment active, run:
 
 ```bash
 python -m unittest discover -s tests -v
+python -m compileall -q main.py renderx tests
 ```
 
----
+Or use the explicit virtual-environment Python path from installation.
+41 automated tests cover maths, source geometry preservation, safety limits,
+keyboard/mouse actions, shape switching, reset, rendering, exit and the five
+extensions. UI tests use
+SDL's dummy driver. Rendered frames for all three shapes were visually inspected;
+the real app loop also completed a 60-second scripted interaction run.
+These checks do not substitute for physical Windows input testing.
 
-## Project Goal
+## Technologies Used
 
-The goal of RenderX is not to compete with full graphics engines.
+Python, Pygame 2.6.1, `math`, `dataclasses`, `unittest`, and Git.
+A dataclass groups related values and supplies an initialiser; no class framework
+or inheritance hierarchy is needed.
 
-The purpose of the project is to make the fundamental stages of 3D rendering understandable by implementing them directly.
+## Git and GitHub
 
-Instead of hiding the mathematics behind a high-level 3D framework, RenderX exposes the basic process:
+The ZIP includes real staged commits in `.git`. Inspect with `git log --oneline`
+and `git status` inside `RenderX`. No remote is configured and nothing was pushed.
+Commit authorship identifies the coding agent. Before your own next commit:
 
-```text
-Model
-  ↓
-Transformation
-  ↓
-Projection
-  ↓
-Rendering
+```bash
+git config user.name "Your Name"
+git config user.email "YOUR_VERIFIED_OR_GITHUB_NOREPLY_EMAIL"
 ```
 
-This makes the project suitable for learning, experimentation and explaining the underlying mathematics during an academic demonstration or viva.
+Create an empty GitHub repository without automatic README/licence/gitignore.
+Replace this placeholder URL with its real URL:
 
----
+```bash
+git remote add origin https://github.com/YOUR_USERNAME/RenderX.git
+git push -u origin main
+```
 
-## Version 1 → Foundation
+Push only `RenderX`; `College-Notes` is separate. Do not initialise another
+repository in the parent folder. Caches, environments, IDE files and secrets are
+ignored. The app itself needs no credentials.
 
-This version established the core architecture that later versions of RenderX were built around.
+## Future Improvements
 
-The fundamental components — **mesh data, scene state, transformations, camera projection and rendering** — formed the foundation for the subsequent development of RenderX.
+Hidden-surface removal, filled polygons, lighting, texture mapping, movable
+camera, resizable window, broader OBJ support and an optional file picker.
 
-Later versions extended this foundation with additional graphics capabilities and eventually transformed RenderX into the **Learning Laboratory** version.
 
----
+## Projection modes
 
-## Project
+Press P to switch between perspective and orthographic without changing the
+object pose. Orthographic uses a fixed 90 pixels per world unit, with no depth
+division. Moving along Z does not change size in orthographic mode. Both modes
+hide geometry behind the near plane. Reset and model selection retain the mode.
 
-**RenderX**  
-*A 3D Wireframe Rendering Engine Built from Scratch Using Python and Pygame.*
 
-Built as an educational computer graphics project focused on understanding the fundamentals of 3D rendering.
+## Coordinate axes
+
+X toggles the red X, green Y and blue Z world-direction axes. They share a fixed
+reference origin at (-2.3, -1.7, 5), placed beside the model rather than at the
+camera's world origin (0,0,0). They stay aligned to world directions while the
+object rotates. The same camera/projection functions draw both. In orthographic
+view Z collapses to a blue point because it points into the screen; its label
+remains visible. Reset/selection retain axis visibility.
+
+
+## OBJ loading
+
+Press O to load or reload `assets/models/house.obj`. Keys 1/2/3 keep selecting the
+built-ins. To try your own simple model, replace that file with your OBJ and press
+O. Paths resolve from the project directory even when launched elsewhere. The
+selection label stays "OBJ house" for this sample slot; no file picker is used.
+A successful load centres the bounding box and scales its longest side to 2 world
+units, then resets the pose while preserving projection/axis settings. A failure
+keeps the previous mesh and pose and shows an error in the HUD and terminal.
+
+Supported: `v x y z`, triangular/polygonal `f` lines, positive vertex indices,
+`v`, `v/vt`, `v//vn`, and `v/vt/vn` face entries. Polygon boundaries are closed and
+shared edges deduplicated. Blank lines and comments are ignored; texture/normal
+records, materials and other commands are ignored. Suffix index syntax is checked
+but texture/normal references are not resolved. No negative/relative indices,
+homogeneous vertex weights, curves, standalone line records, triangulation,
+textures or materials. Limits: 2 MB, 20,000 vertices and 50,000 unique edges.
+Non-finite points, invalid faces/indices and zero-size models are rejected.
+
+
+## Near-plane clipping
+
+`clip_edge_near()` handles both visible, both hidden, and crossing endpoints.
+For a crossing, `t = (near_z - A.z) / (B.z - A.z)` and the intersection is
+`A + t*(B-A)`. Tiny depth differences use equivalent rescaled distances to
+avoid division by a tiny denominator. Object edges and axes share this camera
+pipeline in both projection modes. World-axis endpoints behind the plane have
+no label. Rear-edge visibility is unchanged: this is not hidden-surface removal.
+
+
+## Screenshot export
+
+Press F12 to save the complete freshly rendered window (model and HUD) under
+`screenshots/` beside main.py. The folder is created automatically. Filenames
+contain local date/time, for example `renderx_2026-09-17_18-30-45.png`. Additional
+captures in the same second receive `_01`, `_02`, etc.; exclusive file creation
+prevents overwrites. A HUD/console message reports success or failure. The success
+message appears after capture, so it is not stamped into the image just saved.
+Screenshots are ignored by Git. No extra imaging library is required.

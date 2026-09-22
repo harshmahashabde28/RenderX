@@ -2,11 +2,33 @@
 import pygame
 from renderx import config
 from renderx.camera import Camera
+from renderx.axes import draw_axes
+from renderx.obj_loader import SAMPLE_OBJ, load_obj
 from renderx.input import Controls
 from renderx.models import make_models
 from renderx.renderer import draw_wireframe
 from renderx.scene import Scene
+from renderx.screenshots import save_screenshot
 from renderx.ui import Panel
+
+
+def load_sample(scene, models, path=SAMPLE_OBJ):
+    try:
+        mesh = load_obj(path)
+    except (OSError, ValueError, UnicodeError) as error:
+        return f"OBJ load failed: {error}"
+    models["OBJ house"] = mesh
+    scene.select("OBJ house")
+    return "Loaded OBJ house (O reloads assets/models/house.obj)"
+
+
+def export_frame(screen, panel):
+    try:
+        path = save_screenshot(screen)
+    except (OSError, pygame.error) as error:
+        panel.notify(f"Screenshot failed: {error}")
+    else:
+        panel.notify(f"Saved screenshots/{path.name}")
 
 
 def run():
@@ -29,9 +51,15 @@ def run():
             )
             if not running:
                 break
+            if controls.load_requested:
+                panel.notify(load_sample(scene, models))
             mesh = models[scene.shape]
             draw_wireframe(screen, mesh, scene, camera)
+            if scene.axes_visible:
+                draw_axes(screen, camera, scene.projection, panel.small)
             panel.draw(screen, scene, mesh, clock.get_fps())
+            if controls.screenshot_requested:
+                export_frame(screen, panel)
             pygame.display.flip()
     finally:
         pygame.quit()

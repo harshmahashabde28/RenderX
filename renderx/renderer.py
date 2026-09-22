@@ -15,13 +15,14 @@ def draw_wireframe(surface, mesh, scene, camera):
         pygame.draw.line(surface, config.GRID, (x, 0), (x, config.HEIGHT))
     for y in range(10, config.HEIGHT, 40):
         pygame.draw.line(surface, config.GRID, (0, y), (config.VIEW_WIDTH, y))
-    projected = [camera.project(transform_vertex(point, scene))
-                 for point in mesh.vertices]
+    world_points = [transform_vertex(point, scene) for point in mesh.vertices]
+    projected = [camera.project(point, scene.projection) for point in world_points]
     drawn = 0
     for start, end in mesh.edges:
-        if projected[start] is not None and projected[end] is not None:
-            pygame.draw.line(surface, config.ACCENT,
-                             projected[start], projected[end], 2)
+        segment = camera.project_edge(world_points[start], world_points[end],
+                                      scene.projection)
+        if segment is not None:
+            pygame.draw.line(surface, config.ACCENT, segment[0], segment[1], 2)
             drawn += 1
     for point in projected:
         if point is not None:

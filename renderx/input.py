@@ -9,6 +9,8 @@ SHAPE_KEYS = {pygame.K_1: "Cube", pygame.K_2: "Pyramid",
 
 class Controls:
     def __init__(self):
+        self.load_requested = False
+        self.screenshot_requested = False
         self.focused = True
         self.drag = None
         self.drag_button = None
@@ -33,6 +35,8 @@ class Controls:
 
     def update(self, scene, events, keys, dt, panel, mouse_position, modifiers=0):
         """Return False to exit. A reset/selection wins over motion this frame."""
+        self.load_requested = False
+        self.screenshot_requested = False
         suppress_motion = False
         focus_changed = False
         for event in events:
@@ -54,6 +58,17 @@ class Controls:
                 if event.key == pygame.K_ESCAPE:
                     return False
                 if self.focused:
+                    if event.key == pygame.K_p:
+                        scene.projection = ("Orthographic" if scene.projection ==
+                                            "Perspective" else "Perspective")
+                    if event.key == pygame.K_x:
+                        scene.axes_visible = not scene.axes_visible
+                    if event.key == pygame.K_o:
+                        self.load_requested = True
+                        suppress_motion = True
+                        self.cancel_drag()
+                    if event.key == pygame.K_F12:
+                        self.screenshot_requested = True
                     action = SHAPE_KEYS.get(event.key)
                     if event.key == pygame.K_r:
                         action = "Reset"

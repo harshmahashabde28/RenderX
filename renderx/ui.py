@@ -6,6 +6,8 @@ from renderx import config
 
 class Panel:
     def __init__(self):
+        self.message = ""
+        self.message_until = 0
         self.small = pygame.font.Font(None, 21)
         self.normal = pygame.font.Font(None, 25)
         self.title = pygame.font.Font(None, 38)
@@ -17,6 +19,11 @@ class Panel:
             "Reset": pygame.Rect(left, 668, 124, 40),
             "Exit": pygame.Rect(left + 136, 668, 124, 40),
         }
+
+    def notify(self, message):
+        self.message = message
+        self.message_until = pygame.time.get_ticks() + 6000
+        print(message)  # Full paths/errors remain readable in the terminal.
 
     def hit_test(self, position):
         for action, rectangle in self.buttons.items():
@@ -54,7 +61,7 @@ class Panel:
             "Arrows: rotate X / Y    Q / E: Z",
             "W A S D: move up / left / down / right",
             "Page Up / Down: nearer / farther",
-            "+ / -: scale    1 / 2 / 3: select shape",
+            "+ / -: scale    1/2/3: shape    O: OBJ",
             "R: reset    Esc: exit",
         ]):
             label(text, 389 + i * 23)
@@ -66,9 +73,18 @@ class Panel:
             "Scroll: scale    Buttons: select / reset",
         ]):
             label(text, 547 + i * 23)
+        label("P: projection   X: axes   F12: PNG", 642, color=config.ACCENT)
+        if self.message and pygame.time.get_ticks() < self.message_until:
+            text = self.message
+            while self.small.size(text)[0] > config.VIEW_WIDTH - 48:
+                text = text[:-4] + "..."
+            background = pygame.Rect(16, config.HEIGHT - 64, config.VIEW_WIDTH - 32, 27)
+            pygame.draw.rect(surface, config.PANEL, background, border_radius=4)
+            surface.blit(self.small.render(text, True, config.TEXT),
+                         (24, config.HEIGHT - 59))
         surface.blit(self.normal.render(scene.shape.upper(), True, config.TEXT),
                      (24, 23))
-        surface.blit(self.small.render("Perspective  /  Python + Pygame", True,
+        surface.blit(self.small.render(f"{scene.projection}  /  Axes: {'on' if scene.axes_visible else 'off'} (X)", True,
                                        config.MUTED), (24, 52))
         surface.blit(self.small.render(f"{fps:.0f} FPS  |  Drag to explore", True,
                                        config.MUTED), (24, config.HEIGHT - 30))
