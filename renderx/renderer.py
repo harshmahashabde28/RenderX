@@ -30,3 +30,21 @@ def draw_wireframe(surface, mesh, scene, camera):
                                (round(point[0]), round(point[1])), 3)
     surface.set_clip(previous_clip)
     return drawn
+
+
+def draw_selected_vertex(surface, screen_point, vertex_index, font):
+    """Highlight the final projected position, regardless of inspected stage."""
+    if screen_point is None or not VIEWPORT.collidepoint(screen_point):
+        return False
+    previous_clip = surface.get_clip()
+    surface.set_clip(VIEWPORT)
+    centre = (round(screen_point[0]), round(screen_point[1]))
+    pygame.draw.circle(surface, config.SELECTED, centre, 9, 2)
+    pygame.draw.circle(surface, config.SELECTED, centre, 4)
+    label = font.render(f"v{vertex_index}", True, config.SELECTED)
+    # Keep the label inside the viewport even near its right/bottom edges.
+    x = min(centre[0] + 12, VIEWPORT.right - label.get_width() - 4)
+    y = max(4, min(centre[1] - 20, VIEWPORT.bottom - label.get_height() - 4))
+    surface.blit(label, (x, y))
+    surface.set_clip(previous_clip)
+    return True

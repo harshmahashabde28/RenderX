@@ -3,6 +3,7 @@ from math import radians
 
 WIDTH, HEIGHT = 1120, 740
 PANEL_WIDTH = 300
+INSPECTOR_WIDTH = 520  # Pipeline mode widens only the information panel.
 VIEW_WIDTH = WIDTH - PANEL_WIDTH
 CENTRE = (VIEW_WIDTH // 2, HEIGHT // 2)
 FPS = 60
@@ -26,3 +27,4 @@ GRID = (23, 34, 49)
 TEXT = (225, 235, 247)
 MUTED = (156, 175, 196)
 ACCENT = (83, 223, 191)
+SELECTED = (255, 207, 92)

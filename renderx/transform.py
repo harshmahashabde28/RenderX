@@ -20,10 +20,18 @@ def rotate_z(point, angle):
     return x * c - y * s, x * s + y * c, z
 
 
+def transform_stages(point, scene):
+    """Return each step, so rendering and the inspector use identical maths."""
+    original = tuple(point)
+    scaled = tuple(value * scene.scale for value in original)
+    x_rotated = rotate_x(scaled, scene.angles[0])
+    y_rotated = rotate_y(x_rotated, scene.angles[1])
+    z_rotated = rotate_z(y_rotated, scene.angles[2])
+    translated = tuple(value + offset for value, offset
+                       in zip(z_rotated, scene.position))
+    return original, scaled, x_rotated, y_rotated, z_rotated, translated
+
+
 def transform_vertex(point, scene):
     # Scale and rotate around the model origin BEFORE positioning in the world.
-    point = tuple(value * scene.scale for value in point)
-    point = rotate_x(point, scene.angles[0])
-    point = rotate_y(point, scene.angles[1])
-    point = rotate_z(point, scene.angles[2])
-    return tuple(value + offset for value, offset in zip(point, scene.position))
+    return transform_stages(point, scene)[-1]

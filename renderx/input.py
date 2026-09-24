@@ -11,6 +11,7 @@ class Controls:
     def __init__(self):
         self.load_requested = False
         self.screenshot_requested = False
+        self.vertex_step = 0
         self.focused = True
         self.drag = None
         self.drag_button = None
@@ -33,10 +34,12 @@ class Controls:
         smaller = keys[pygame.K_MINUS] or keys[pygame.K_KP_MINUS]
         scene.resize((bigger - smaller) * config.SCALE_SPEED * dt)
 
-    def update(self, scene, events, keys, dt, panel, mouse_position, modifiers=0):
+    def update(self, scene, events, keys, dt, panel, mouse_position, modifiers=0,
+               learning=None):
         """Return False to exit. A reset/selection wins over motion this frame."""
         self.load_requested = False
         self.screenshot_requested = False
+        self.vertex_step = 0
         suppress_motion = False
         focus_changed = False
         for event in events:
@@ -58,6 +61,19 @@ class Controls:
                 if event.key == pygame.K_ESCAPE:
                     return False
                 if self.focused:
+                    if learning is not None:
+                        if event.key == pygame.K_TAB:
+                            learning.cycle_mode()
+                            self.cancel_drag()
+                            suppress_motion = True
+                        elif event.key == pygame.K_COMMA:
+                            self.vertex_step -= 1
+                        elif event.key == pygame.K_PERIOD:
+                            self.vertex_step += 1
+                        elif event.key == pygame.K_LEFTBRACKET:
+                            learning.select_stage(-1)
+                        elif event.key == pygame.K_RIGHTBRACKET:
+                            learning.select_stage(1)
                     if event.key == pygame.K_p:
                         scene.projection = ("Orthographic" if scene.projection ==
                                             "Perspective" else "Perspective")
