@@ -6,7 +6,7 @@ RenderX is a 3D wireframe renderer built from scratch with **Python and Pygame**
 
 Version 3 turns the original renderer into the **RenderX Learning Laboratory**: the app shows the intermediate values of its own rendering pipeline, so you can point at a number on screen and see which formula produced it.
 
-![RenderX Explore mode](docs/screenshots/explore.png)
+![RenderX Explore mode](screenshots/explore.png)
 
 ---
 
@@ -44,11 +44,11 @@ Version 3 turns the original renderer into the **RenderX Learning Laboratory**: 
 
 | Pipeline inspector | Compare views |
 |---|---|
-| ![Pipeline mode](docs/screenshots/pipeline.png) | ![Compare mode](docs/screenshots/compare.png) |
+| ![Pipeline mode](screenshots/pipeline.png) | ![Compare mode](screenshots/compare.png) |
 
 | Near-plane clipping lesson | Shape details |
 |---|---|
-| ![Clipping lesson](docs/screenshots/clipping.png) | ![Mesh inspector](docs/screenshots/mesh-inspector.png) |
+| ![Clipping lesson](screenshots/clipping.png) | ![Mesh inspector](screenshots/mesh-inspector.png) |
 
 ---
 
@@ -210,7 +210,3 @@ RenderX works with in-memory model data and does not use a database, backend ser
 | 3 | Learning Laboratory: pipeline inspector, compare views, 15 models, shape details, lessons, quiz, guided demo, clickable dashboard, screen fit | 86 |
 
 ---
-
-## Author
-
-Built by [@harshmahashabde28](https://github.com/harshmahashabde28) as a college project (Milestone 03: Implementation / Development).
