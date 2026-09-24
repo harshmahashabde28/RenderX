@@ -120,7 +120,7 @@ class LearningStateTests(unittest.TestCase):
 
     def test_modes_keep_selection_and_stage(self):
         state = LearningState(selected_vertex=3, stage_index=5)
-        for expected in ("Pipeline", "Explore", "Pipeline"):
+        for expected in ("Pipeline", "Compare", "Explore"):
             state.cycle_mode()
             self.assertEqual(state.mode, expected)
             self.assertEqual((state.selected_vertex, state.stage_index), (3, 5))
@@ -175,7 +175,7 @@ class LearningInteractionTests(unittest.TestCase):
                   [key(pygame.K_2), key(pygame.K_PERIOD)],
                   [key(pygame.K_o), key(pygame.K_COMMA)],
                   [key(pygame.K_r), key(pygame.K_F12)],
-                  [key(pygame.K_TAB)], [key(pygame.K_TAB)],
+                  [key(pygame.K_TAB)], [key(pygame.K_TAB)], [key(pygame.K_TAB)],
                   [key(pygame.K_ESCAPE)]]
         observed = []
         original_draw = Panel.draw
@@ -202,7 +202,9 @@ class LearningInteractionTests(unittest.TestCase):
         self.assertEqual(observed[3][:4], ('Pipeline', 1, 7, 'Pyramid'))
         self.assertEqual(observed[4][:4], ('Pipeline', 9, 7, 'OBJ house'))
         self.assertEqual(observed[5], observed[4])
-        self.assertEqual(observed[6][0], 'Explore')
+        self.assertEqual(observed[6][0], 'Compare')
         self.assertEqual(observed[6][-1], (1120, 740))
-        self.assertEqual(observed[7], observed[5])
+        self.assertEqual(observed[7][0], 'Explore')
+        self.assertEqual(observed[7][-1], (1120, 740))
+        self.assertEqual(observed[8], observed[5])
         self.assertFalse(pygame.display.get_init())

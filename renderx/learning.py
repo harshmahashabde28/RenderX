@@ -1,7 +1,7 @@
 """Small learning state; independent of Pygame and the scene's object pose."""
 from dataclasses import dataclass
 
-MODES = ("Explore", "Pipeline")
+MODES = ("Explore", "Pipeline", "Compare")
 STAGE_COUNT = 8
 
 
@@ -10,6 +10,7 @@ class LearningState:
     mode: str = "Explore"
     selected_vertex: int = 0
     stage_index: int = 0
+    guides_visible: bool = True
 
     def cycle_mode(self):
         self.mode = MODES[(MODES.index(self.mode) + 1) % len(MODES)]

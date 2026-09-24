@@ -57,6 +57,9 @@ class Panel:
         label("LEARNING LABORATORY", 64, color=config.ACCENT)
         self.draw_buttons(surface, scene)
         label(f"{len(mesh.vertices)} vertices / {len(mesh.edges)} edges", 205)
+        if learning is not None and learning.mode == "Compare":
+            label(f"Vertex {learning.selected_vertex}   |   , / . to select", 225,
+                  color=config.SELECTED)
         label("TRANSFORM", 245, color=config.ACCENT)
         angles = tuple(round(degrees(angle)) % 360 for angle in scene.angles)
         label(f"Rotation   X {angles[0]}   Y {angles[1]}   Z {angles[2]}", 272)
@@ -136,7 +139,7 @@ class Panel:
             label(line, left, 611 + index * 20, color=config.MUTED)
         label("R: reset   P: projection", left + 280, 673)
         label("X: axes   O: OBJ   F12: PNG", left + 280, 696)
-        label(", / .  vertex     [ / ]  stage     Tab  Explore", left, 719,
+        label(", / .  vertex     [ / ]  stage     Tab  Compare", left, 719,
               color=config.ACCENT)
 
     def draw_overlay(self, surface, scene, fps, learning):
@@ -150,9 +153,11 @@ class Panel:
                          (24, config.HEIGHT - 59))
         surface.blit(self.normal.render(scene.shape.upper(), True, config.TEXT),
                      (24, 23))
-        surface.blit(self.small.render(f"{scene.projection}  /  Axes: {'on' if scene.axes_visible else 'off'} (X)", True,
-                                       config.MUTED), (24, 52))
         mode = learning.mode if learning is not None else "Explore"
+        projection = (f"Both views / P selects {scene.projection}" if mode == "Compare"
+                      else scene.projection)
+        surface.blit(self.small.render(f"{projection}  /  Axes: {'on' if scene.axes_visible else 'off'} (X)", True,
+                                       config.MUTED), (24, 52))
         surface.blit(self.small.render(f"{mode} Mode  |  Tab: switch mode", True,
                                        config.ACCENT), (24, 77))
         if mode == "Pipeline":
@@ -166,6 +171,8 @@ class Panel:
                 surface.blit(self.small.render(text, True, config.MUTED),
                              (24, 105 + index * 23))
             footer = "Arrows/Q/E: rotate | WASD: pan | PgUp/Dn: depth | +/-: scale | Esc: exit"
+        elif mode == "Compare":
+            footer = "Shared pose | Same zoom in both panes | Screen coordinates are absolute | Tab: Explore"
         else:
             footer = "Drag to explore | Tab: Pipeline Inspector"
         surface.blit(self.small.render(f"{fps:.0f} FPS  |  {footer}", True,

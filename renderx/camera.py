@@ -24,20 +24,27 @@ class Camera:
         return tuple(value - camera_value for value, camera_value
                      in zip(world_point, self.position))
 
-    def project(self, world_point, mode="Perspective"):
-        return self.project_relative(self.relative_point(world_point), mode)
+    def project(self, world_point, mode="Perspective", *, centre=config.CENTRE,
+                focal_length=config.FOCAL_LENGTH):
+        return self.project_relative(self.relative_point(world_point), mode,
+                                     centre=centre, focal_length=focal_length)
 
-    def project_relative(self, point, mode="Perspective"):
+    def project_relative(self, point, mode="Perspective", *, centre=config.CENTRE,
+                         focal_length=config.FOCAL_LENGTH):
         if mode == "Orthographic":
-            return project_orthographic(point)
-        return project_point(point)
+            return project_orthographic(point, centre,
+                                        focal_length / config.DEFAULT_DEPTH)
+        return project_point(point, centre, focal_length)
 
-    def project_edge(self, world_a, world_b, mode="Perspective"):
+    def project_edge(self, world_a, world_b, mode="Perspective", *,
+                     centre=config.CENTRE, focal_length=config.FOCAL_LENGTH):
         clipped = clip_edge_near(self.relative_point(world_a),
                                  self.relative_point(world_b))
         if clipped is None:
             return None
-        return tuple(self.project_relative(point, mode) for point in clipped)
+        return tuple(self.project_relative(point, mode, centre=centre,
+                                           focal_length=focal_length)
+                     for point in clipped)
 
 
 def project_orthographic(point, centre=config.CENTRE,

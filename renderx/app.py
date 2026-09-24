@@ -8,6 +8,7 @@ from renderx.input import Controls
 from renderx.models import make_models
 from renderx.learning import LearningState
 from renderx.pipeline import snapshot_vertex
+from renderx.comparison import draw_comparison
 from renderx.renderer import draw_wireframe, draw_selected_vertex
 from renderx.scene import Scene
 from renderx.screenshots import save_screenshot
@@ -68,9 +69,12 @@ def run():
             window_size = (config.VIEW_WIDTH + panel_width, config.HEIGHT)
             if screen.get_size() != window_size:
                 screen = pygame.display.set_mode(window_size)
-            draw_wireframe(screen, mesh, scene, camera)
-            if scene.axes_visible:
-                draw_axes(screen, camera, scene.projection, panel.small)
+            if learning.mode == "Compare":
+                draw_comparison(screen, mesh, scene, camera, learning, panel.small)
+            else:
+                draw_wireframe(screen, mesh, scene, camera)
+                if scene.axes_visible:
+                    draw_axes(screen, camera, scene.projection, panel.small)
             snapshots = None
             if learning.mode == "Pipeline":
                 snapshots = snapshot_vertex(mesh.vertices[learning.selected_vertex],

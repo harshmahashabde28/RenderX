@@ -74,6 +74,8 @@ class Controls:
                             learning.select_stage(-1)
                         elif event.key == pygame.K_RIGHTBRACKET:
                             learning.select_stage(1)
+                        elif event.key == pygame.K_v and learning.mode == "Compare":
+                            learning.guides_visible = not learning.guides_visible
                     if event.key == pygame.K_p:
                         scene.projection = ("Orthographic" if scene.projection ==
                                             "Perspective" else "Perspective")
