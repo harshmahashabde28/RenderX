@@ -192,7 +192,8 @@ class LearningInteractionTests(unittest.TestCase):
                  patch.object(Panel, 'draw', record), \
                  patch('renderx.app.save_screenshot',
                        side_effect=lambda surface: save_screenshot(surface, folder)):
-                run()
+                with patch('renderx.app.initial_size', return_value=(1360, 900)):
+                    run()
             captures = list(Path(folder).glob('*.png'))
             self.assertEqual(len(captures), 1)
             self.assertEqual(pygame.image.load(str(captures[0])).get_size(), (1360, 900))

@@ -14,7 +14,8 @@ from renderx.scene import Scene
 from renderx.screenshots import save_screenshot
 from renderx.ui import Panel
 from renderx.dashboard import Dashboard, SIZE
-from renderx.lab import handle_lab, draw_lab, draw_help, wide_panel
+from renderx.window import WindowView, initial_size
+from renderx.lab import handle_lab, draw_lab, wide_panel
 
 
 def load_sample(scene, models, path=SAMPLE_OBJ):
@@ -41,7 +42,9 @@ def run():
         # No audio is used, so only initialise the modules we need.
         pygame.display.init()
         pygame.font.init()
-        display = pygame.display.set_mode(SIZE)
+        display = pygame.display.set_mode(initial_size(pygame.display.get_desktop_sizes()[0]), pygame.RESIZABLE)
+        window = WindowView(display.get_size())
+        canvas = pygame.Surface(SIZE)
         screen = pygame.Surface((config.WIDTH, config.HEIGHT))
         pygame.display.set_caption("RenderX | Learning Laboratory - Checkpoint 3")
         clock = pygame.time.Clock()
@@ -54,11 +57,18 @@ def run():
         while running:
             dt = clock.tick(config.FPS) / 1000.0  # milliseconds -> seconds
             events = pygame.event.get()  # Also pumps the current input state.
+            for event in events:
+                if event.type == pygame.VIDEORESIZE:
+                    display = pygame.display.set_mode((max(1,event.w),max(1,event.h)), pygame.RESIZABLE)
+                    controls.cancel_drag()
+            window.resize(display.get_size())
+            events = [window.event(event) for event in events]
+            mouse = window.point(pygame.mouse.get_pos())
             events = dashboard.events(events, scene, models, learning, controls)
             previous_mode = learning.mode
             running = controls.update(
                 scene, events, pygame.key.get_pressed(), dt, panel,
-                dashboard.map_position(pygame.mouse.get_pos()), pygame.key.get_mods(),
+                dashboard.map_position(mouse), pygame.key.get_mods(),
                 learning=learning,
             )
             if not running:
@@ -93,7 +103,8 @@ def run():
                                      learning.selected_vertex, panel.normal)
             if not extra_mode:
                 panel.draw(screen, scene, mesh, clock.get_fps(), learning, snapshots)
-            dashboard.draw(display, screen, scene, models, learning, camera, pygame.mouse.get_pos())
+            dashboard.draw(canvas, screen, scene, models, learning, camera, mouse)
+            window.draw(display, canvas)
             if controls.screenshot_requested:
                 export_frame(display, panel)
             pygame.display.flip()

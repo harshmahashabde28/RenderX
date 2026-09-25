@@ -198,7 +198,8 @@ class ComparisonInteractionTests(unittest.TestCase):
                        side_effect=lambda screen: save_screenshot(screen, directory)):
                 clock.return_value.tick.return_value = 40
                 clock.return_value.get_fps.return_value = 25
-                run()
+                with patch('renderx.app.initial_size', return_value=(1360, 900)):
+                    run()
             images = list(Path(directory).glob('*.png'))
             self.assertEqual(len(images), 1)
             self.assertEqual(pygame.image.load(str(images[0])).get_size(), (1360, 900))

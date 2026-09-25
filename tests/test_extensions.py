@@ -250,7 +250,8 @@ class ScreenshotTests(unittest.TestCase):
                 return path
             with patch('pygame.event.get', side_effect=frames), \
                  patch('renderx.app.save_screenshot', side_effect=capture):
-                run()
+                with patch('renderx.app.initial_size', return_value=(1360, 900)):
+                    run()
             self.assertEqual(len(captures), 1)
             self.assertEqual(pygame.image.load(str(captures[0])).get_size(),
                              (1360, 900))

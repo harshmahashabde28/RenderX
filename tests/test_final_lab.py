@@ -190,6 +190,7 @@ class FinalInteractionTests(unittest.TestCase):
             with patch('pygame.event.get',side_effect=frames), \
                  patch('pygame.key.get_pressed',return_value=defaultdict(int)), \
                  patch('renderx.app.save_screenshot',side_effect=lambda s:save_screenshot(s,folder)):
-                run()
+                with patch('renderx.app.initial_size', return_value=(1360, 900)):
+                    run()
             self.assertEqual(len(list(Path(folder).glob('*.png'))),1)
         self.assertFalse(pygame.display.get_init())

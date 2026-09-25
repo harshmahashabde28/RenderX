@@ -175,5 +175,6 @@ class InteractionTests(unittest.TestCase):
             frames = [[], [event(pygame.KEYDOWN, key=pygame.K_2)],
                       [event(pygame.KEYDOWN, key=pygame.K_3)], [close]]
             with patch("pygame.event.get", side_effect=frames):
-                run()
+                with patch('renderx.app.initial_size', return_value=(1360, 900)):
+                    run()
             self.assertFalse(pygame.display.get_init())

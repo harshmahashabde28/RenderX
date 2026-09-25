@@ -6,6 +6,7 @@ import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 import pygame
 from renderx.dashboard import Dashboard, SIZE
+from renderx.window import WindowView, initial_size
 from renderx.models import make_library
 from renderx.scene import Scene
 from renderx.camera import Camera
@@ -35,7 +36,14 @@ def main():
         panel=Panel()
         display=pygame.Surface(SIZE)
         Dashboard(panel).draw(display,surface,scene,models,state,Camera())
-        pygame.image.save(display,folder/('ui-'+name+'.png'))
+        output=pygame.Surface(initial_size((1920,1080)))
+        WindowView(output.get_size()).draw(output,display)
+        pygame.image.save(output,folder/('fit-'+name+'.png'))
+        if name == 'final-explore':
+            for size in ((980,648),(1500,700),(700,900)):
+                output=pygame.Surface(size)
+                WindowView(size).draw(output,display)
+                pygame.image.save(output,folder/f'fit-window-{size[0]}x{size[1]}.png')
     pygame.quit()
     print(f'{len(cases)} current frames saved in {folder}')
 

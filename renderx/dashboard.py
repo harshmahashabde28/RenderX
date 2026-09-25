@@ -34,8 +34,8 @@ class Dashboard:
     def layout(self, scene, models, learning):
         self.buttons.clear(); self.labels.clear(); self.active.clear()
         for i, mode in enumerate(MODES):
-            self.button(('key', pygame.K_F1+i), f'{mode}  F{i+1}', (20+i*188, 59, 178, 37), mode == learning.mode)
-        for i, (label, key) in enumerate((('Save PNG',pygame.K_F12),('Reset',pygame.K_r),('Exit',pygame.K_ESCAPE))):
+            self.button(('key', pygame.K_F1+i), f"{('Explore','How it works','Compare views','Shape details','Lessons','Quiz','Guided demo')[i]}  F{i+1}", (20+i*188, 59, 178, 37), mode == learning.mode)
+        for i, (label, key) in enumerate((('Screenshot',pygame.K_F12),('Reset',pygame.K_r),('Exit',pygame.K_ESCAPE))):
             self.button(('key',key),label,(992+i*116,13,106,32))
         self.button(('help',), 'Help  ?', (880,13,102,32), learning.help_visible)
         names = list(models)
@@ -43,11 +43,11 @@ class Dashboard:
             names.append('OBJ house')
         for i,name in enumerate(names):
             self.button(('shape',name),name,(716+(i%4)*150,148+(i//4)*34,142,28),scene.shape == name)
-        self.button(('key',pygame.K_o),'Load / reload OBJ',(716,289,186,30))
+        self.button(('key',pygame.K_o),'Open sample OBJ',(716,289,186,30))
         self.button(('key',pygame.K_p),scene.projection+'  P',(20,714,196,32),True)
         self.button(('key',pygame.K_x),'Axes '+('on' if scene.axes_visible else 'off'),(224,714,124,32),scene.axes_visible)
-        self.button(('key',pygame.K_COMMA),'Vertex -',(356,714,98,32))
-        self.button(('key',pygame.K_PERIOD),'Vertex +',(462,714,98,32))
+        self.button(('key',pygame.K_COMMA),'Point back',(356,714,98,32))
+        self.button(('key',pygame.K_PERIOD),'Point next',(462,714,98,32))
         view = DEMO_VIEWS[learning.demo_index] if learning.mode == 'Demo' else learning.mode
         if view == 'Compare':
             self.button(('guides',),'Guides',(568,714,108,32),learning.guides_visible)
@@ -55,9 +55,10 @@ class Dashboard:
             for axis,name in enumerate('XYZ'):
                 for sign,symbol in ((-1,'-'),(1,'+')):
                     x=97+axis*194+(0 if sign == -1 else 88)
-                    self.button((kind,axis,sign),name+' '+symbol,(x,758+row*40,80,31))
-        self.button(('scale',-1),'Smaller -',(97,838,128,31))
-        self.button(('scale',1),'Larger +',(233,838,128,31))
+                    labels=(('Tilt -','Tilt +'),('Turn -','Turn +'),('Roll -','Roll +')) if kind == 'rotate' else (('Left','Right'),('Down','Up'),('Nearer','Farther'))
+                    self.button((kind,axis,sign),labels[axis][0 if sign == -1 else 1],(x,758+row*40,80,31))
+        self.button(('scale',-1),'Shrink',(97,838,128,31))
+        self.button(('scale',1),'Enlarge',(233,838,128,31))
         self.button(('key',pygame.K_n),'Next model',(369,838,144,31))
         self.button(('key',pygame.K_b),'Previous',(521,838,144,31))
         if view == 'Pipeline':
@@ -148,8 +149,8 @@ class Dashboard:
             target.blit((font or self.font).render(text,True,color),(x,y))
         label('RenderX',20,15,self.title)
         label('LEARNING LABORATORY',146,21,self.small,config.ACCENT)
-        label('Choose a model',716,118,self.font)
-        label('Click to select. Your original vertices stay unchanged.',904,121,self.small,config.MUTED)
+        label('Choose your shape',716,118,self.font)
+        label('Click any shape to start.',904,121,self.small,config.MUTED)
         # Existing renderer keeps its coordinate system; only the displayed viewport scales.
         target.blit(pygame.transform.smoothscale(legacy.subsurface((0,0,820,740)),VIEW.size),VIEW)
         label('Rotate',24,765,self.small,config.MUTED)
@@ -167,7 +168,8 @@ class Dashboard:
         mesh=models[scene.shape]
         label(f'{scene.shape}   /   {len(mesh.vertices)} vertices   /   {len(mesh.edges)} edges',914,295,self.small,config.MUTED)
         pygame.draw.line(target,BUTTON,(716,334),(1314,334))
-        label(view+' workspace',716,350,self.title)
+        titles={'Explore':'Move and explore','Pipeline':'Follow one point','Compare':'Compare the views','Mesh':'About this shape','Lesson':'Learn by trying','Challenge':'Test yourself'}
+        label(titles[view],716,350,self.title)
         if view in ('Pipeline','Compare') and learning.mode != 'Demo':
             label('Coordinates: 820 x 740 render canvas',1010,359,self.small,config.MUTED)
         if learning.mode == 'Demo':
@@ -218,16 +220,16 @@ class Dashboard:
                 label(str(value),1025,394+i*29,self.small)
             text_lines(target,self.small,'; '.join(report['warnings']) or 'Mesh ready. No OBJ parsing warnings.',716,725,598,config.ACCENT)
         else:
-            text_lines(target,self.title,'One scene. Two ways to see depth.' if view == 'Compare' else 'Make the maths visible.',716,400,590,config.ACCENT)
-            text_lines(target,self.font,'Move Z nearer or farther. Perspective changes size; orthographic keeps the same size while the object stays fully visible.' if view == 'Compare' else 'Choose a shape above, then drag it or use the buttons below the canvas. Open Pipeline to inspect each coordinate calculation.',716,451,590)
+            text_lines(target,self.title,'One scene. Two ways to see depth.' if view == 'Compare' else 'Start here: drag the shape.',716,400,590,config.ACCENT)
+            text_lines(target,self.font,'Move Z nearer or farther. Perspective changes size; orthographic keeps the same size while the object stays fully visible.' if view == 'Compare' else 'Choose a shape above, then drag it or use the buttons below the canvas. Open How it works to inspect each coordinate calculation.',716,451,590)
             label('LIVE TRANSFORM',716,554,self.small,config.MUTED)
             label('Rotation XYZ   '+', '.join(f'{degrees(v):.0f}°' for v in scene.angles),716,584)
             label('Position XYZ   '+', '.join(f'{v:.2f}' for v in scene.position),716,618)
             label(f'Scale   {scene.scale:.2f}x    |    Selected vertex   {learning.selected_vertex}',716,652)
-            text_lines(target,self.font,'Try next: Pipeline > Compare > Lessons > Challenge',716,710,590,config.ACCENT)
+            text_lines(target,self.font,'Try next: How it works > Compare views > Lessons > Quiz',716,710,590,config.ACCENT)
             if learning.mode == 'Demo':
                 text_lines(target,self.font,DEMO_TITLES[learning.demo_index],716,764,590,config.SELECTED)
-        label('Move X: left/right    Y: up/down    Z: nearer/farther',24,882,self.small,config.MUTED)
+        label('Drag to rotate. Scroll to resize. Window edges resize the app.',24,882,self.small,config.MUTED)
         pose=' / '.join(f'{v:.1f}' for v in scene.position)
         angles=' / '.join(f'{degrees(v):.0f}' for v in scene.angles)
         label(f'XYZ {pose}   |   Rotation {angles}   |   Scale {scene.scale:.2f}',716,882,self.small,config.MUTED)
@@ -251,3 +253,18 @@ class Dashboard:
             for i,line in enumerate(lines): label(line,130,242+i*43,self.font)
             rect=self.buttons[('help',)]; pygame.draw.rect(target,BUTTON,rect,border_radius=7)
             label('Close help',rect.x+47,rect.y+9,self.font)
+
+        if not learning.help_visible:
+            hovered=next((a for a,r in self.buttons.items() if r.collidepoint(mouse)),None)
+            if hovered:
+                kind=hovered[0]
+                tips={'rotate':'Rotate by 10 degrees. Tilt = X, turn = Y, roll = Z.',
+                      'move':'Move 0.2 units. Nearer / farther changes depth.',
+                      'scale':'Change model size by 0.1. The original shape is preserved.',
+                      'stage':'Inspect this calculation and its formula.',
+                      'choice':'Select an answer, then click Check answer.',
+                      'shape':'Select this model and reset its pose.',
+                      'help':'A plain-language guide to all controls.'}
+                tip=tips.get(kind,self.labels[hovered])
+                pygame.draw.rect(target,BG,(20,878,1320,22))
+                label(tip,24,882,self.small,config.ACCENT)

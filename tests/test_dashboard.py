@@ -83,7 +83,8 @@ class DashboardTests(unittest.TestCase):
                 sizes.append(surface.get_size())
                 return Path('test.png')
             save.side_effect=capture
-            run()
+            with patch('renderx.app.initial_size', return_value=(1360, 900)):
+                run()
             self.assertEqual(save.call_count,1)
             self.assertEqual(sizes,[SIZE])
         self.assertFalse(pygame.display.get_init())
