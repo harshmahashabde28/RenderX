@@ -70,9 +70,9 @@ class Controls:
                             self.vertex_step -= 1
                         elif event.key == pygame.K_PERIOD:
                             self.vertex_step += 1
-                        elif event.key == pygame.K_LEFTBRACKET:
+                        elif event.key == pygame.K_LEFTBRACKET and learning.mode in ("Explore", "Pipeline", "Compare"):
                             learning.select_stage(-1)
-                        elif event.key == pygame.K_RIGHTBRACKET:
+                        elif event.key == pygame.K_RIGHTBRACKET and learning.mode in ("Explore", "Pipeline", "Compare"):
                             learning.select_stage(1)
                         elif event.key == pygame.K_v and learning.mode == "Compare":
                             learning.guides_visible = not learning.guides_visible

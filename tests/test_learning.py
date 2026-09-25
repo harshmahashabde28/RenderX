@@ -120,7 +120,7 @@ class LearningStateTests(unittest.TestCase):
 
     def test_modes_keep_selection_and_stage(self):
         state = LearningState(selected_vertex=3, stage_index=5)
-        for expected in ("Pipeline", "Compare", "Explore"):
+        for expected in ("Pipeline", "Compare", "Mesh", "Lesson", "Challenge", "Demo", "Explore"):
             state.cycle_mode()
             self.assertEqual(state.mode, expected)
             self.assertEqual((state.selected_vertex, state.stage_index), (3, 5))
@@ -175,7 +175,7 @@ class LearningInteractionTests(unittest.TestCase):
                   [key(pygame.K_2), key(pygame.K_PERIOD)],
                   [key(pygame.K_o), key(pygame.K_COMMA)],
                   [key(pygame.K_r), key(pygame.K_F12)],
-                  [key(pygame.K_TAB)], [key(pygame.K_TAB)], [key(pygame.K_TAB)],
+                  [key(pygame.K_TAB)], [key(pygame.K_F1)], [key(pygame.K_TAB)],
                   [key(pygame.K_ESCAPE)]]
         observed = []
         original_draw = Panel.draw

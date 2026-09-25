@@ -172,8 +172,8 @@ class Panel:
                              (24, 105 + index * 23))
             footer = "Arrows/Q/E: rotate | WASD: pan | PgUp/Dn: depth | +/-: scale | Esc: exit"
         elif mode == "Compare":
-            footer = "Shared pose | Same zoom in both panes | Screen coordinates are absolute | Tab: Explore"
+            footer = "Shared pose | Same zoom in both panes | Coordinates are absolute | Tab: Mesh | H: help"
         else:
-            footer = "Drag to explore | Tab: Pipeline Inspector"
+            footer = "N/B: shape | Tab: modes | F1-F7: direct mode | H: help"
         surface.blit(self.small.render(f"{fps:.0f} FPS  |  {footer}", True,
                                        config.MUTED), (24, config.HEIGHT - 30))

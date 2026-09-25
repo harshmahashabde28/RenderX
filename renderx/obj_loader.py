@@ -33,6 +33,7 @@ def load_obj(path):
     if len(text.encode("utf-8")) > MAX_FILE_BYTES:
         raise ValueError("OBJ exceeds the 2 MB educational loader limit.")
     vertices, faces = [], []
+    ignored = set()
     for line_number, line in enumerate(text.splitlines(), 1):
         fields = line.split("#", 1)[0].split()
         if not fields:
@@ -66,7 +67,9 @@ def load_obj(path):
                 if len(face) < 3 or len(set(face)) != len(face):
                     raise ValueError("face needs at least 3 distinct vertices")
                 faces.append((line_number, face))
-            # vt, vn, materials, groups and all other commands are ignored.
+            else:
+                ignored.add(fields[0])
+            # Unsupported commands are reported, not interpreted.
         except ValueError as error:
             raise ValueError(f"OBJ line {line_number}: {error}") from error
     if not vertices or not faces:
@@ -79,4 +82,14 @@ def load_obj(path):
             edges.add(tuple(sorted((start, end))))
             if len(edges) > MAX_EDGES:
                 raise ValueError("Too many unique edges (limit 50000).")
-    return Mesh(normalize_vertices(vertices), sorted(edges))
+    largest = max(abs(v) for point in vertices for v in point)
+    normalized = normalize_vertices(vertices)
+    reduced = [tuple(v/largest for v in p) for p in vertices]
+    extent = max(max(p[a] for p in reduced)-min(p[a] for p in reduced) for a in range(3))
+    factor = (2/extent)/largest
+    warnings = ["Ignored OBJ commands: " + ", ".join(sorted(ignored))] if ignored else []
+    if not isfinite(factor):
+        factor = None
+        warnings.append("Normalization factor exceeds float range; geometry normalized safely.")
+    return Mesh(normalized, sorted(edges), faces=[face for _, face in faces],
+                normalization_scale=factor, warnings=warnings)

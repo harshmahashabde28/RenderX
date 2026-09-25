@@ -133,7 +133,7 @@ class ComparisonInteractionTests(unittest.TestCase):
             self.assertEqual(scene.projection, expected)
             self.assertEqual((scene.angles, scene.position, scene.scale, scene.shape), pose)
             draw_comparison(self.surface, make_cube(), scene, Camera(), learning, self.panel.small)
-        for mode in ('Explore', 'Pipeline', 'Compare'):
+        for mode in ('Mesh', 'Lesson', 'Challenge', 'Demo', 'Explore', 'Pipeline', 'Compare'):
             controls.update(scene, [key(pygame.K_TAB)], defaultdict(int), 0,
                             self.panel, (200, 300), learning=learning)
             self.assertEqual(learning.mode, mode)
@@ -176,7 +176,7 @@ class ComparisonInteractionTests(unittest.TestCase):
         frames = [[key(pygame.K_TAB), key(pygame.K_TAB)], [],
                   [key(pygame.K_p), key(pygame.K_x), key(pygame.K_v), key(pygame.K_PERIOD)],
                   [key(pygame.K_F12)], [key(pygame.K_2)], [key(pygame.K_o)],
-                  [key(pygame.K_r)], [key(pygame.K_TAB)], [key(pygame.K_TAB)],
+                  [key(pygame.K_r)], [key(pygame.K_F1)], [key(pygame.K_TAB)],
                   [pygame.event.Event(pygame.QUIT)]]
         held = [defaultdict(int) for _ in frames]
         held[1][pygame.K_PAGEDOWN] = 1

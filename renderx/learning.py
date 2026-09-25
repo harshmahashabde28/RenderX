@@ -1,7 +1,8 @@
 """Small learning state; independent of Pygame and the scene's object pose."""
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from renderx.curriculum import Challenge
 
-MODES = ("Explore", "Pipeline", "Compare")
+MODES = ("Explore", "Pipeline", "Compare", "Mesh", "Lesson", "Challenge", "Demo")
 STAGE_COUNT = 8
 
 
@@ -11,6 +12,13 @@ class LearningState:
     selected_vertex: int = 0
     stage_index: int = 0
     guides_visible: bool = True
+
+    lesson_index: int = 0
+    lesson_answer: bool = False
+    clip_depth: float = 0.0
+    challenge: Challenge = field(default_factory=Challenge)
+    demo_index: int = 0
+    help_visible: bool = False
 
     def cycle_mode(self):
         self.mode = MODES[(MODES.index(self.mode) + 1) % len(MODES)]
