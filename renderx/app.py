@@ -46,7 +46,7 @@ def run():
         window = WindowView(display.get_size())
         canvas = pygame.Surface(SIZE)
         screen = pygame.Surface((config.WIDTH, config.HEIGHT))
-        pygame.display.set_caption("RenderX | Learning Laboratory - Checkpoint 3")
+        pygame.display.set_caption("RenderX | Learning Laboratory")
         clock = pygame.time.Clock()
         models, scene, camera = make_library(), Scene(), Camera()
         controls, panel = Controls(), Panel()
