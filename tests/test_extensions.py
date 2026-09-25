@@ -253,5 +253,5 @@ class ScreenshotTests(unittest.TestCase):
                 run()
             self.assertEqual(len(captures), 1)
             self.assertEqual(pygame.image.load(str(captures[0])).get_size(),
-                             (config.WIDTH, config.HEIGHT))
+                             (1360, 900))
             self.assertFalse(pygame.display.get_init())

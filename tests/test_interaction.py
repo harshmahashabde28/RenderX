@@ -171,7 +171,7 @@ class InteractionTests(unittest.TestCase):
     def test_real_app_loop_each_exit_and_cleanup(self):
         for close in [event(pygame.QUIT), event(pygame.KEYDOWN, key=pygame.K_ESCAPE),
                       event(pygame.MOUSEBUTTONDOWN, button=1,
-                            pos=self.panel.buttons["Exit"].center)]:
+                            pos=(1277,29))]:
             frames = [[], [event(pygame.KEYDOWN, key=pygame.K_2)],
                       [event(pygame.KEYDOWN, key=pygame.K_3)], [close]]
             with patch("pygame.event.get", side_effect=frames):

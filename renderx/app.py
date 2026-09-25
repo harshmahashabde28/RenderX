@@ -13,6 +13,7 @@ from renderx.renderer import draw_wireframe, draw_selected_vertex
 from renderx.scene import Scene
 from renderx.screenshots import save_screenshot
 from renderx.ui import Panel
+from renderx.dashboard import Dashboard, SIZE
 from renderx.lab import handle_lab, draw_lab, draw_help, wide_panel
 
 
@@ -40,21 +41,24 @@ def run():
         # No audio is used, so only initialise the modules we need.
         pygame.display.init()
         pygame.font.init()
-        screen = pygame.display.set_mode((config.WIDTH, config.HEIGHT))
+        display = pygame.display.set_mode(SIZE)
+        screen = pygame.Surface((config.WIDTH, config.HEIGHT))
         pygame.display.set_caption("RenderX | Learning Laboratory - Checkpoint 3")
         clock = pygame.time.Clock()
         models, scene, camera = make_library(), Scene(), Camera()
         controls, panel = Controls(), Panel()
+        dashboard = Dashboard(panel)
         learning = LearningState()
         previous_mesh = models[scene.shape]
         running = True
         while running:
             dt = clock.tick(config.FPS) / 1000.0  # milliseconds -> seconds
             events = pygame.event.get()  # Also pumps the current input state.
+            events = dashboard.events(events, scene, models, learning, controls)
             previous_mode = learning.mode
             running = controls.update(
                 scene, events, pygame.key.get_pressed(), dt, panel,
-                pygame.mouse.get_pos(), pygame.key.get_mods(),
+                dashboard.map_position(pygame.mouse.get_pos()), pygame.key.get_mods(),
                 learning=learning,
             )
             if not running:
@@ -71,7 +75,7 @@ def run():
                            else config.PANEL_WIDTH)
             window_size = (config.VIEW_WIDTH + panel_width, config.HEIGHT)
             if screen.get_size() != window_size:
-                screen = pygame.display.set_mode(window_size)
+                screen = pygame.Surface(window_size)
             extra_mode = learning.mode in ("Mesh", "Lesson", "Challenge", "Demo")
             if extra_mode:
                 draw_lab(screen, mesh, scene, camera, learning, panel, clock.get_fps())
@@ -89,10 +93,9 @@ def run():
                                      learning.selected_vertex, panel.normal)
             if not extra_mode:
                 panel.draw(screen, scene, mesh, clock.get_fps(), learning, snapshots)
-            if learning.help_visible:
-                draw_help(screen, panel)
+            dashboard.draw(display, screen, scene, models, learning, camera, pygame.mouse.get_pos())
             if controls.screenshot_requested:
-                export_frame(screen, panel)
+                export_frame(display, panel)
             pygame.display.flip()
     finally:
         pygame.quit()

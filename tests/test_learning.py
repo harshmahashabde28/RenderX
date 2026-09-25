@@ -195,7 +195,7 @@ class LearningInteractionTests(unittest.TestCase):
                 run()
             captures = list(Path(folder).glob('*.png'))
             self.assertEqual(len(captures), 1)
-            self.assertEqual(pygame.image.load(str(captures[0])).get_size(), (1340, 740))
+            self.assertEqual(pygame.image.load(str(captures[0])).get_size(), (1360, 900))
         self.assertEqual(observed[0][:4], ('Explore', 0, 0, 'Cube'))
         self.assertEqual(observed[1][:4], ('Pipeline', 7, 7, 'Cube'))
         self.assertEqual(observed[2][4:6], ('Orthographic', False))

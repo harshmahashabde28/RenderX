@@ -5,6 +5,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 import pygame
+from renderx.dashboard import Dashboard, SIZE
 from renderx.models import make_library
 from renderx.scene import Scene
 from renderx.camera import Camera
@@ -31,7 +32,10 @@ def main():
         scene=Scene(shape=shape)
         surface=pygame.Surface((1340 if wide_panel(state) else 1120,740))
         draw_lab(surface,models[shape],scene,Camera(),state,Panel(),0)
-        pygame.image.save(surface,folder/(name+'.png'))
+        panel=Panel()
+        display=pygame.Surface(SIZE)
+        Dashboard(panel).draw(display,surface,scene,models,state,Camera())
+        pygame.image.save(display,folder/('ui-'+name+'.png'))
     pygame.quit()
     print(f'{len(cases)} current frames saved in {folder}')
 

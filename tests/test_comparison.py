@@ -201,7 +201,7 @@ class ComparisonInteractionTests(unittest.TestCase):
                 run()
             images = list(Path(directory).glob('*.png'))
             self.assertEqual(len(images), 1)
-            self.assertEqual(pygame.image.load(str(images[0])).get_size(), (1120, 740))
+            self.assertEqual(pygame.image.load(str(images[0])).get_size(), (1360, 900))
         self.assertEqual(observed[0], ('Compare', 'Cube', (0, 0, 5), 'Perspective', True, 0, True))
         self.assertAlmostEqual(observed[1][2][2], 5.04)
         self.assertEqual(observed[2][2], observed[1][2])
