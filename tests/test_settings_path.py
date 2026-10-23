@@ -1,6 +1,7 @@
 """Keep preferences in each platform's normal user configuration folder."""
 
 import unittest
+from pathlib import PureWindowsPath
 
 from renderx.theme import settings_path
 
@@ -9,7 +10,12 @@ class SettingsPathTests(unittest.TestCase):
     def test_windows_uses_local_app_data(self):
         path = settings_path("win32", r"C:\Users\Riley",
                              {"LOCALAPPDATA": r"C:\Users\Riley\Local"})
-        self.assertEqual(path.as_posix(), "C:/Users/Riley/Local/RenderX/settings.json")
+        # Use Windows path rules even on Linux, where Path() preserves the
+        # backslashes from this simulated LOCALAPPDATA value.
+        self.assertEqual(
+            PureWindowsPath(path).as_posix(),
+            "C:/Users/Riley/Local/RenderX/settings.json",
+        )
 
     def test_macos_uses_application_support(self):
         path = settings_path("darwin", "/Users/riley", {})
