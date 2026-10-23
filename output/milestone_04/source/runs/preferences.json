@@ -1,0 +1,25 @@
+[
+  {
+    "frame": 1,
+    "events": [
+      {
+        "type": "click_action",
+        "action": [
+          "toolbar_open_obj"
+        ]
+      }
+    ]
+  },
+  {
+    "frame": 2,
+    "events": [
+      {
+        "type": "click_action",
+        "action": [
+          "file_menu",
+          "preferences"
+        ]
+      }
+    ]
+  }
+]

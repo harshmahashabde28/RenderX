@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "renderx"
+version = "4.0.0"
+description = "A wireframe 3D renderer, projection challenges, maze campaign, and survival shooter."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Harsh Mahashabde" }]
+keywords = ["3d", "wireframe", "pygame", "software-renderer", "shooter"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Games/Entertainment",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "pygame>=2.6.1",
+    "numpy>=1.24",
+    "PyOpenGL>=3.1.7",
+    "PyGLM>=2.7.3",
+    "trimesh>=4.4",
+]
+
+[project.scripts]
+renderx = "renderx.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/harshmahashabde28/RenderX"
+Repository = "https://github.com/harshmahashabde28/RenderX.git"
+
+[tool.setuptools.packages.find]
+include = ["renderx*", "assets*"]
+
+[tool.setuptools.package-data]
+"renderx.shooter" = [
+    "LICENSE",
+    "UPSTREAM.md",
+    "shaders/*.glsl",
+    "assets/models/*.glb",
+    "assets/models/*.png",
+]
+"renderx.ui" = ["icon_assets/*.svg", "icon_assets/*.md", "icon_assets/LICENSE"]
+"assets" = ["models/*.obj", "fonts/*.ttf", "fonts/*.txt", "audio/*.ogg", "audio/*.md", "logo/*.png"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

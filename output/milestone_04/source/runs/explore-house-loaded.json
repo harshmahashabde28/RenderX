@@ -1,0 +1,11 @@
+[
+  {
+    "frame": 1,
+    "events": [
+      {
+        "type": "drop_file",
+        "file": "E:\\PROJECTS\\RenderX-main\\assets\\models\\house.obj"
+      }
+    ]
+  }
+]

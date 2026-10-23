@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "checks": [
+    "zero and negative depths are rejected",
+    "positive near-plane boundary remains projectable after clipping",
+    "non-finite and overflowing projections are rejected",
+    "edge crossing near plane is retained",
+    "single-vertex mesh renders without edges",
+    "empty mesh is rejected with a clear validation error",
+    "duplicate-position vertices remain renderable",
+    "zero-area face stays stable in solid rendering",
+    "huge finite model coordinates do not escape the viewport",
+    "empty, invalid, and out-of-range OBJ files report errors",
+    "oversized OBJ is rejected",
+    "failed OBJ import keeps the active model and reports a message"
+  ]
+}

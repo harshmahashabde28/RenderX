@@ -1,0 +1,4 @@
+[
+  {"frame": 1, "events": [{"type": "mouse_down_action", "action": ["theme"]}]},
+  {"frame": 3, "events": [{"type": "focus_lost"}]}
+]

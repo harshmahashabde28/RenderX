@@ -1,14 +1,42 @@
+# Python bytecode and caches
+__pycache__/
+*.egg-info/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
 .venv/
 venv/
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.env
-.env.*
-.obsidian/
+env/
+ENV/
+
+# IDE and Editor configurations
 .vscode/
 .idea/
+.obsidian/
+*.swp
+*.swo
+
+# OS files
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Logs and runtime artifacts
 *.log
-screenshots/
+.env
+.env.*
+
+# PyInstaller / packaging
+build/
+dist/
+
+# Scratch directory (for internal debug scripts)
+scratch/
+
+# Note: docs/screenshots/ is tracked in repository for documentation and README

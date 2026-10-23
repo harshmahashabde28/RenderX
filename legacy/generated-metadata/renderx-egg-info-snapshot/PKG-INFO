@@ -1,0 +1,116 @@
+Metadata-Version: 2.4
+Name: renderx
+Version: 4.0.0
+Summary: A software-rendered 3D wireframe engine, first-person dungeon crawler, and interactive learning laboratory written in Python and Pygame.
+Author-email: Harsh Mahashabde <darkharsh56@gmail.com>
+License: MIT
+Project-URL: Homepage, https://github.com/harshmahashabde28/RenderX
+Project-URL: Repository, https://github.com/harshmahashabde28/RenderX.git
+Keywords: 3d,wireframe,software-renderer,pygame,graphics,educational,game
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Topic :: Games/Entertainment
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: pygame>=2.6.0
+Provides-Extra: fast
+Requires-Dist: numpy>=2.0.0; extra == "fast"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0.0; extra == "dev"
+Requires-Dist: ruff>=0.3.0; extra == "dev"
+Requires-Dist: pyinstaller>=6.0.0; extra == "dev"
+
+# RenderX
+
+RenderX is a Python 3D graphics project with a custom wireframe and software rasterizer, interactive projection challenges, a first-person maze, and **Breakpoint**, a real-time 3D survival shooter.
+
+## Modes
+
+- **Explore** — inspect built-in and imported meshes, change transforms and projection, and compare wireframe, hidden-line, solid, and depth rendering.
+- **Challenges** — work through short exercises in orientation, depth, and near-plane clipping.
+- **Maze** — complete a three-stage first-person wireframe campaign with keys, fog of war, and a live projection toggle.
+- **Shooter / Breakpoint** — fight through escalating enemy waves in an OpenGL arena with destructible cover, mouse aiming, a dash, health supplies, a minimap, difficulty settings, and a saved best score.
+
+The application supports saved dark and light themes. The shooter opens in its own resizable OpenGL window and returns to the previous RenderX mode when **Return to RenderX** is selected.
+
+## Screenshots
+
+| RenderX studio | Breakpoint combat |
+|---|---|
+| ![Dark RenderX Explore screen](screenshots/renderx-explore.png) | ![Breakpoint gameplay with the HUD and minimap](screenshots/breakpoint-gameplay.png) |
+
+| Signal maze | Breakpoint menu |
+|---|---|
+| ![First-person wireframe maze](screenshots/renderx-maze.png) | ![Breakpoint title and run menu](screenshots/breakpoint-menu.png) |
+
+## Run
+
+Python 3.10 or newer and an OpenGL 3.3 compatible graphics device are required.
+
+```powershell
+python -m pip install -r requirements.txt
+python main.py
+```
+
+## Controls
+
+### Application
+
+| Action | Control |
+|---|---|
+| Change mode | Click a top navigation item or press `Tab` |
+| Switch theme | Click `Light` or `Dark` in the header |
+| Pause a maze or shooter run | `Esc` |
+| Exit the application | Close the window |
+
+### Breakpoint
+
+| Action | Control |
+|---|---|
+| Move | `W` `A` `S` `D` or arrow keys |
+| Aim | Mouse |
+| Fire | Hold left mouse button or `Space` |
+| Dash | `Shift` (cooldown applies) |
+| Pause / resume | `Esc` |
+| Toggle fullscreen | `F11` |
+
+### Maze
+
+| Action | Control |
+|---|---|
+| Move / turn | `W` / `S` and `A` / `D` or arrow keys |
+| Strafe | `Q` / `E` |
+| Look | Drag inside the view |
+| Projection | `P` |
+| Scan nearby cells | `Space` |
+| Pause | `Esc` |
+| Continue after a stage | `Enter` or `C` |
+| New run | `R` |
+
+### Explore
+
+| Action | Control |
+|---|---|
+| Choose a mesh | Shape picker |
+| Rotate / move | Drag or keyboard controls |
+| Scale | Mouse wheel or `+` / `-` |
+| Projection / axes | `P` / `X` |
+| Load sample OBJ | `O` |
+| Reset / screenshot | `R` / `F12` |
+| Change render mode | `M` |
+
+## Design
+
+Explore and Challenges use RenderX's own transformation, clipping, projection, and rasterization code. Maze geometry uses the same wireframe path. Breakpoint uses a separate OpenGL 3.3 pipeline for its textured 3D models and real-time combat.
+
+The shooter code and model assets are adapted from [3D-RPG-Shooter](https://github.com/dev-mojammel-hosain/3D-RPG-Shooter) with project-owner authorization. Its original license and a detailed acknowledgement are included in [`renderx/shooter/UPSTREAM.md`](renderx/shooter/UPSTREAM.md).
+
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the component boundaries and [`docs/REFERENCES.md`](docs/REFERENCES.md) for project credits.

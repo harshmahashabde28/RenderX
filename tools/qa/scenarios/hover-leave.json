@@ -1,0 +1,4 @@
+[
+  {"frame": 1, "events": [{"type": "move_to_action", "action": ["destination", "Explore"]}]},
+  {"frame": 3, "events": [{"type": "window_leave"}]}
+]

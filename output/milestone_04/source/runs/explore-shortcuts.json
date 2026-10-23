@@ -1,0 +1,11 @@
+[
+  {
+    "frame": 1,
+    "events": [
+      {
+        "type": "key_down",
+        "key": "f1"
+      }
+    ]
+  }
+]

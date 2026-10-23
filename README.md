@@ -1,212 +1,99 @@
-# RenderX — 3D Wireframe Rendering Engine & Learning Laboratory
+# RenderX
 
-**Version 3 (Milestone 03: Implementation / Development)**
+RenderX is a Python 3D graphics app with a custom wireframe and software rasterizer, projection challenges, a first-person maze, and **Breakpoint**, a real-time 3D survival shooter. It opens on a short landing page and enters the Explore workspace by default.
 
-RenderX is a 3D wireframe renderer built from scratch with **Python and Pygame**. It converts 3D model coordinates into 2D screen coordinates using explicit, readable mathematics (no OpenGL, no NumPy, no 3D engine) and draws the result as a wireframe.
+## Modes
 
-Version 3 turns the original renderer into the **RenderX Learning Laboratory**: the app shows the intermediate values of its own rendering pipeline, so you can point at a number on screen and see which formula produced it.
+- **Explore** — inspect built-in and imported meshes, change transforms and projection, and compare wireframe, hidden-line, solid, and depth rendering.
+- **Challenges** — work through short exercises in orientation, depth, and near-plane clipping.
+- **Maze** — complete a three-stage first-person wireframe campaign with keys, fog of war, and a live projection toggle.
+- **Shooter / Breakpoint** — survive escalating waves in a 3D arena. Scout, striker, bulwark, and wraith vehicles arrive over time, with a three phase Iron Wraith boss every fifth wave. Health kits and timed rapid fire, shield, and overdrive boosts reward smart movement. The game also includes destructible cover, mouse aiming, a dash, a minimap, difficulty settings, and a saved best score.
 
-![RenderX Explore mode](screenshots/explore.png)
+The application uses a charcoal technical theme with a mineral-teal accent by default. The light theme is available from the header and both choices are remembered. The main window renders at its live pixel size so the interface stays sharp while resizing. Breakpoint opens in a separate resizable OpenGL window and returns to the RenderX screen you came from when **Return to RenderX** is selected.
 
----
+## Screenshots
 
-## Features
-
-**Core renderer**
-
-- Built-in models: cube, pyramid, rectangular prism
-- 3D translation, rotation about X / Y / Z, and scaling
-- Perspective and orthographic projection (toggle with `P`)
-- Coordinate axes (toggle with `X`)
-- Near-plane edge clipping in camera space
-- Basic OBJ loading (`v` and `f` records) with a sample `house.obj`
-- Screenshot export to a unique timestamped PNG (`F12`)
-- HUD / information panel, keyboard and mouse controls
-- Automated test suite (86 tests)
-
-**Learning Laboratory (Version 3)**
-
-- 15 built-in and procedural models (prisms, cylinder, cone, sphere, torus, plane, saddle, ripple, helix, and more)
-- Clickable dashboard with plain-language buttons and hover help
-- Seven modes:
-
-| Mode | What it does |
+| RenderX studio | Breakpoint combat |
 |---|---|
-| Explore | Drag, rotate, move, resize and switch models |
-| How it works | Traces one selected vertex through eight coordinate stages with formulas |
-| Compare views | Perspective and orthographic views side by side, sharing one scene |
-| Shape details | Vertex/edge/face counts, bounds, normalisation and topology checks |
-| Lessons | 14 short lessons, including clipping and transformation-order experiments |
-| Quiz | 10 deterministic multiple-choice questions with hints, score and retry |
-| Guided demo | 8 presenter-advanced steps that reuse the real screens |
+| ![RenderX Explore screen](screenshots/renderx-v4-explore-1280.png) | ![Breakpoint gameplay with the HUD and minimap](screenshots/breakpoint-gameplay.png) |
 
-- Automatic window fit for different screen sizes (proportional scaling, correct mouse mapping)
-
-| Pipeline inspector | Compare views |
+| Signal maze | Breakpoint menu |
 |---|---|
-| ![Pipeline mode](screenshots/pipeline.png) | ![Compare mode](screenshots/compare.png) |
+| ![First-person wireframe maze](screenshots/renderx-v4-maze-1280.png) | ![Breakpoint title and run menu](screenshots/breakpoint-menu.png) |
 
-| Near-plane clipping lesson | Shape details |
-|---|---|
-| ![Clipping lesson](screenshots/clipping.png) | ![Mesh inspector](screenshots/mesh-inspector.png) |
+## Run
 
----
+Python 3.10 or newer and an OpenGL 3.3 compatible graphics device are required. The dependency list includes the renderer, game, and model-loading libraries.
 
-## Getting started
-
-### Requirements
-
-- Python 3
-- Pygame (the only runtime dependency)
-
-RenderX was verified with Python 3.12 and Pygame 2.6.1.
-
-### Install and run
-
-```bash
-git clone https://github.com/harshmahashabde28/RenderX.git
-cd RenderX
-pip install -r requirements.txt
+```powershell
+python -m pip install -r requirements.txt
 python main.py
 ```
 
-### Run the tests
-
-```bash
-# Linux / macOS
-SDL_VIDEODRIVER=dummy python -m unittest discover -s tests
-
-# Windows (PowerShell)
-$env:SDL_VIDEODRIVER="dummy"; python -m unittest discover -s tests
-```
-
-The tests run without opening a window. The final source passes all 86 tests.
-
----
+For development, `python main.py --skip-landing` opens Explore directly.
+`python main.py --mode explore|challenge|maze|shooter` opens one destination
+directly for focused testing.
 
 ## Controls
 
-Every action is also available as an on-screen button. Keyboard shortcuts remain for fast use.
+### Application
 
-| Action | Keys / mouse |
+| Action | Control |
 |---|---|
-| Switch mode | Click a tab, `F1`–`F7`, or `Tab` to cycle |
-| Rotate X / Y | Arrow keys, or left-drag |
-| Rotate Z | `Q` / `E`, or right-drag |
-| Move | `W` `A` `S` `D`; `Page Up` / `Page Down` for nearer / farther; `Shift` + left-drag or middle-drag to pan |
-| Scale | `+` / `-` or mouse wheel |
-| Select model | `1` `2` `3` (original three), `N` / `B` (next / previous), or click a model button |
-| Load sample OBJ | `O` |
+| Change page | Click a top tab, press `Tab`, or use `Ctrl/Cmd+Alt+1…4` |
+| Return to landing | Click the RenderX mark or press `Ctrl/Cmd+Shift+H` |
+| Switch theme | Click the sun/moon button in the header |
+| Open shortcut reference | `F1` or `?` |
+| Move keyboard focus / activate | `F6` / `Enter` |
+| Pause a maze or shooter run | `Esc` |
+| Exit the application | Close the window |
+
+| Adjust master volume | Drag the `VOL` control in the header or shooter HUD |
+| Mute / unmute music | Click the speaker button in the header or shooter HUD |
+
+Volume and music preference are saved between launches. Sound effects follow the master volume; the speaker button only mutes music.
+
+### Breakpoint
+
+| Action | Control |
+|---|---|
+| Move | `W` `A` `S` `D` or arrow keys |
+| Aim | Mouse |
+| Fire | Hold left mouse button or `Space` |
+| Dash | `Shift` (cooldown applies) |
+| Pause / resume | `Esc` |
+| Toggle fullscreen | `F11` |
+
+### Maze
+
+| Action | Control |
+|---|---|
+| Move / turn | `W` / `S` and `A` / `D` or arrow keys |
+| Strafe | `Q` / `E` |
+| Look | Drag inside the view |
 | Projection | `P` |
-| Axes | `X` |
-| Select vertex | `,` / `.` |
-| Pipeline stage | Click a row, or `[` / `]` |
-| Compare guides | `V` |
-| Lessons | `Enter` next; `H` show answer; `U` / `J` move the clipping edge |
-| Quiz | `J` / `K` choose; `Enter` check; `H` hint; `T` retry |
-| Guided demo | `F7` to start; `Enter` / `Space` to advance; `F1` to leave |
-| Screenshot | `F12` |
-| Reset | `R` |
-| Exit | `Esc` or close the window |
+| Scan nearby cells | `Space` |
+| Pause | `Esc` |
+| Continue after a stage | `Enter` or `C` |
+| New run | `R` |
 
----
+### Explore
 
-## How it works
+| Action | Control |
+|---|---|
+| Choose a mesh | Shape picker |
+| Rotate / move | Drag, the inspector sliders, or keyboard controls |
+| Scale | Mouse wheel or `+` / `-` |
+| Set an exact transform | Click a numeric value and type a number |
+| Projection / axes | `P` / `X` |
+| Load sample OBJ | `O` |
+| Reset / screenshot | `R` / `F12` |
+| Change render mode | `M` |
 
-For every frame, each vertex goes through this path:
+## Design
 
-```text
-original -> scale -> rotate X -> rotate Y -> rotate Z -> translate -> camera-relative -> clip -> project -> draw
-```
+Explore and Challenges use RenderX's own transformation, clipping, projection, and rasterization code. Maze geometry uses the same wireframe path. Breakpoint uses a separate OpenGL 3.3 pipeline for its textured 3D models and real-time combat. The UI uses locally bundled Inter and IBM Plex Mono fonts with their SIL Open Font License texts in `assets/fonts/`.
 
-- **Model data:** a `Mesh` holds `(x, y, z)` vertices and `(start, end)` edge indices. Original vertices are never modified; the pose is recalculated every frame.
-- **Transformations:** scale, then rotate about X, Y and Z, then translate.
-- **Perspective:** `screen_x = cx + f*x/z`, `screen_y = cy - f*y/z`
-- **Orthographic:** `screen_x = cx + k*x`, `screen_y = cy - k*y`
-- **Clipping:** edges crossing the near plane are shortened using `t = (near_z - A.z) / (B.z - A.z)` and `I = A + t*(B - A)`, before the depth division happens.
+Shooter code and model assets are adapted from [3D-RPG-Shooter](https://github.com/dev-mojammel-hosain/3D-RPG-Shooter) with project-owner authorization. Its original license and acknowledgement are included in [`renderx/shooter/UPSTREAM.md`](renderx/shooter/UPSTREAM.md).
 
-Coordinate convention: X right, Y up, positive Z away from the camera.
-
-### Architecture
-
-```text
-Keyboard / Mouse -> Input Handling -> Scene / State -> Model + Transforms
-                 -> Near-plane Clipping -> 3D Projection -> Renderer -> Pygame Display
-```
-
-Pure mathematics lives in `transform.py`, `camera.py`, `clipping.py`, `pipeline.py` and `experiments.py`. Pygame drawing lives in `renderer.py`, `axes.py`, `ui.py`, `lab.py` and `dashboard.py`. Keyboard, mouse and dashboard clicks all call the same Scene actions.
-
----
-
-## Project structure
-
-```text
-RenderX/
-├── main.py                 entry point
-├── requirements.txt        Pygame dependency
-├── README.md
-├── assets/models/house.obj sample OBJ model
-├── docs/screenshots/       images used in this README
-├── renderx/
-│   ├── app.py              lifecycle and frame loop
-│   ├── config.py           colours, sizes, limits
-│   ├── mesh.py             Mesh validation and inspection
-│   ├── models.py           cube, pyramid, rectangular prism
-│   ├── shapes.py           procedural shape library
-│   ├── scene.py            pose and shared actions
-│   ├── transform.py        scale, rotations, translation
-│   ├── camera.py           camera-relative points and projections
-│   ├── clipping.py         near-plane edge clipping
-│   ├── renderer.py         wireframe drawing
-│   ├── axes.py             world axes
-│   ├── obj_loader.py       safe OBJ subset loader
-│   ├── screenshots.py      timestamped PNG export
-│   ├── input.py            keyboard and mouse handling
-│   ├── ui.py               information panel and overlays
-│   ├── learning.py         mode and selection state
-│   ├── pipeline.py         eight-stage vertex snapshots
-│   ├── comparison.py       perspective vs orthographic panes
-│   ├── curriculum.py       lessons and quiz
-│   ├── experiments.py      clipping and operation-order maths
-│   ├── lab.py              lesson, mesh, quiz and demo screens
-│   ├── dashboard.py        clickable interface
-│   └── window.py           screen fit and mouse mapping
-├── tests/                  86 automated tests
-└── tools/render_qa.py      reproducible static QA frames
-```
-
----
-
-## OBJ support
-
-The loader reads `v` (vertex) lines and `f` (polygon face) lines with positive indices. Optional `v/vt`, `v//vn` and `v/vt/vn` suffixes are accepted and ignored. The model is centred and scaled so its longest side is two world units.
-
-Not supported: negative indices, materials, textures, curves and standalone line records. Files over 2 MB, 20,000 vertices or 50,000 unique edges are rejected. If loading fails, the previous model stays active.
-
----
-
-## Data and storage
-
-RenderX works with in-memory model data and does not use a database, backend server, cloud or AI service. Screenshots are saved as PNG files. Lesson, quiz and demo progress is kept in memory and resets when the program closes.
-
----
-
-## Limitations
-
-- Wireframe only: no filled polygons, lighting, textures, hidden-surface removal or depth buffer
-- Fixed camera (no free-fly camera)
-- Shape parameters are function arguments in `shapes.py`, not on-screen sliders
-- The dashboard scales proportionally but has no separate mobile layout
-- Automated tests run headless; behaviour and performance on your own machine are best checked by running the app
-
----
-
-## Development history
-
-| Version | Main change | Tests |
-|---|---|---|
-| 1 | Cube, pyramid, prism; transforms; perspective; keyboard and mouse; HUD | 24 |
-| 2 | Orthographic mode, axes, OBJ loading, near-plane clipping, screenshots | 41 |
-| 3 | Learning Laboratory: pipeline inspector, compare views, 15 models, shape details, lessons, quiz, guided demo, clickable dashboard, screen fit | 86 |
-
----
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the component boundaries and [`docs/REFERENCES.md`](docs/REFERENCES.md) for project credits.

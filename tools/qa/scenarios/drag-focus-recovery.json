@@ -1,0 +1,9 @@
+[
+  {"frame": 1, "events": [{"type": "click_action", "action": ["destination", "Explore"]}]},
+  {"frame": 3, "events": [{"type": "mouse_down", "pos": [650, 450], "button": 1}]},
+  {"frame": 4, "events": [{"type": "mouse_move", "pos": [700, 490], "rel": [50, 40], "buttons": [1, 0, 0]}]},
+  {"frame": 5, "events": [{"type": "key_down", "key": "w"}, {"type": "focus_lost"}]},
+  {"frame": 6, "events": [{"type": "mouse_up", "pos": [-20, -20], "button": 1}]},
+  {"frame": 7, "events": [{"type": "focus_gained"}]},
+  {"frame": 8, "events": [{"type": "key_up", "key": "w"}]}
+]

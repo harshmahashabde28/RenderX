@@ -1,0 +1,72 @@
+{
+  "status": "passed",
+  "error": null,
+  "scenario": "app",
+  "seed": null,
+  "target_frames": 3,
+  "frames_advanced": 3,
+  "events_injected": 0,
+  "simulated_seconds": 0.05,
+  "wall_seconds": 0.309,
+  "draw_calls": 3,
+  "draw_ms_avg": 55.065,
+  "draw_ms_p95": 150.472,
+  "draw_ms_p99": 150.472,
+  "frame_ms_avg": 8.5,
+  "frame_ms_p95": 9.026,
+  "frame_ms_p99": 9.026,
+  "measured_frames": 2,
+  "destination": "Maze",
+  "active_navigation_state": "active",
+  "window_identity": {
+    "caption": [
+      "RenderX \u00b7 Maze",
+      "RenderX \u00b7 Maze"
+    ],
+    "display_size": [
+      1178,
+      780
+    ]
+  },
+  "window_icon_set_calls": [
+    [
+      128,
+      128
+    ]
+  ],
+  "cursor_set_calls": [],
+  "typography_audit": null,
+  "memory_audit": null,
+  "scene_state": {
+    "shape": "Cube",
+    "position": [
+      0.0,
+      0.0,
+      5.0
+    ],
+    "angles": [
+      0.3490658503988659,
+      0.5235987755982988,
+      0.0
+    ],
+    "scale": 1.0,
+    "projection": "Perspective"
+  },
+  "interaction_state": {
+    "focused": true,
+    "drag": null,
+    "drag_button": null,
+    "dashboard_focused": true,
+    "pressed": null,
+    "hover": null,
+    "drag_action": null,
+    "drag_splitter": null,
+    "focused_field": null,
+    "scene_scroll": 0,
+    "help_open": false
+  },
+  "screenshots": [
+    "frame-000002.png",
+    "window-icon.png"
+  ]
+}

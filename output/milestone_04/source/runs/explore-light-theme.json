@@ -1,0 +1,13 @@
+[
+  {
+    "frame": 1,
+    "events": [
+      {
+        "type": "click_action",
+        "action": [
+          "theme"
+        ]
+      }
+    ]
+  }
+]

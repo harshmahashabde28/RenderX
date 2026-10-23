@@ -1,27 +1,7 @@
-"""Start RenderX with: python main.py."""
-import sys
+"""Start RenderX with ``python main.py``."""
 
-
-def main():
-    try:
-        import pygame
-    except ModuleNotFoundError as error:
-        if error.name != "pygame":
-            raise
-        print("Pygame is missing. Run: python -m pip install -r requirements.txt",
-              file=sys.stderr)
-        return 1
-
-    from renderx.app import run
-
-    try:
-        run()
-    except pygame.error as error:
-        print(f"RenderX could not start or use the display: {error}",
-              file=sys.stderr)
-        return 1
-    return 0
+from renderx.__main__ import main
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())

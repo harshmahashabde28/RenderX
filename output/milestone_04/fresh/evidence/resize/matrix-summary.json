@@ -1,0 +1,95 @@
+{
+  "runner_status": "passed",
+  "resize_snapshots": {
+    "2": {
+      "actual": [
+        1024,
+        640
+      ],
+      "expected": [
+        1024,
+        640
+      ],
+      "passed": true
+    },
+    "4": {
+      "actual": [
+        1024,
+        640
+      ],
+      "expected": [
+        1024,
+        640
+      ],
+      "passed": true
+    },
+    "6": {
+      "actual": [
+        1280,
+        720
+      ],
+      "expected": [
+        1280,
+        720
+      ],
+      "passed": true
+    },
+    "8": {
+      "actual": [
+        1366,
+        768
+      ],
+      "expected": [
+        1366,
+        768
+      ],
+      "passed": true
+    },
+    "10": {
+      "actual": [
+        1920,
+        1080
+      ],
+      "expected": [
+        1920,
+        1080
+      ],
+      "passed": true
+    },
+    "12": {
+      "actual": [
+        2560,
+        1440
+      ],
+      "expected": [
+        2560,
+        1440
+      ],
+      "passed": true
+    },
+    "14": {
+      "actual": [
+        1024,
+        1600
+      ],
+      "expected": [
+        1024,
+        1600
+      ],
+      "passed": true
+    },
+    "16": {
+      "actual": [
+        2200,
+        720
+      ],
+      "expected": [
+        2200,
+        720
+      ],
+      "passed": true
+    }
+  },
+  "rapid_resize_events": 50,
+  "all_snapshots_passed": true
+}

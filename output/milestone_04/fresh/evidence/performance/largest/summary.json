@@ -1,0 +1,86 @@
+{
+  "status": "passed",
+  "error": null,
+  "scenario": "largest",
+  "seed": null,
+  "target_frames": 300,
+  "frames_advanced": 300,
+  "events_injected": 0,
+  "simulated_seconds": 5.0,
+  "wall_seconds": 8.605,
+  "draw_calls": 300,
+  "draw_ms_avg": 9.703,
+  "draw_ms_p95": 10.593,
+  "draw_ms_p99": 11.297,
+  "frame_ms_avg": 10.642,
+  "frame_ms_p95": 11.93,
+  "frame_ms_p99": 12.605,
+  "measured_frames": 299,
+  "destination": "Explore",
+  "active_navigation_state": "active",
+  "window_identity": {
+    "caption": [
+      "RenderX \u00b7 Explore",
+      "RenderX \u00b7 Explore"
+    ],
+    "display_size": [
+      1360,
+      900
+    ]
+  },
+  "window_icon_set_calls": [
+    [
+      128,
+      128
+    ]
+  ],
+  "cursor_set_calls": [],
+  "typography_audit": null,
+  "memory_audit": {
+    "samples": [
+      {
+        "frame": 0,
+        "resident_bytes": 38817792,
+        "peak_resident_bytes": 38817792
+      },
+      {
+        "frame": 300,
+        "resident_bytes": 48852992,
+        "peak_resident_bytes": 65372160
+      }
+    ],
+    "resident_delta_bytes": 10035200,
+    "peak_resident_bytes": 65372160
+  },
+  "scene_state": {
+    "shape": "Signal wave",
+    "position": [
+      0.0,
+      0.0,
+      5.0
+    ],
+    "angles": [
+      0.3490658503988659,
+      0.5235987755982988,
+      0.0
+    ],
+    "scale": 1.0,
+    "projection": "Perspective"
+  },
+  "interaction_state": {
+    "focused": true,
+    "drag": null,
+    "drag_button": null,
+    "dashboard_focused": true,
+    "pressed": null,
+    "hover": null,
+    "drag_action": null,
+    "drag_splitter": null,
+    "focused_field": null,
+    "scene_scroll": 0,
+    "help_open": false
+  },
+  "screenshots": [
+    "window-icon.png"
+  ]
+}

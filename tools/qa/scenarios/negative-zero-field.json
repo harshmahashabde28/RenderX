@@ -1,0 +1,11 @@
+[
+  {"frame": 1, "events": [{"type": "click_action", "action": ["destination", "Explore"]}]},
+  {"frame": 3, "events": [{"type": "click_action", "action": ["field", "position", 0]}]},
+  {"frame": 4, "events": [{"type": "key_down", "key": "backspace"}]},
+  {"frame": 5, "events": [{"type": "key_down", "key": "minus", "unicode": "-"}]},
+  {"frame": 6, "events": [{"type": "key_down", "key": "0", "unicode": "0"}]},
+  {"frame": 7, "events": [{"type": "key_down", "key": "period", "unicode": "."}]},
+  {"frame": 8, "events": [{"type": "key_down", "key": "0", "unicode": "0"}]},
+  {"frame": 9, "events": [{"type": "key_down", "key": "0", "unicode": "0"}]},
+  {"frame": 10, "events": [{"type": "key_down", "key": "return", "unicode": "\r"}]}
+]

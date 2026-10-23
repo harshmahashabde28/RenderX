@@ -1,0 +1,6 @@
+[
+  {"frame": 1, "events": [{"type": "click_action", "action": ["destination", "Explore"]}]},
+  {"frame": 12, "events": [{"type": "click_action", "action": ["destination", "Challenges"]}]},
+  {"frame": 24, "events": [{"type": "click_action", "action": ["destination", "Maze"]}]},
+  {"frame": 36, "events": [{"type": "click_action", "action": ["destination", "Shooter"]}]}
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "frame": 1,
+    "events": [
+      {
+        "type": "drop_file",
+        "file": "E:\\PROJECTS\\RenderX-main\\output\\milestone_04\\source\\fixtures\\oversized.obj"
+      }
+    ]
+  }
+]

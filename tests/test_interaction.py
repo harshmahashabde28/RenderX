@@ -88,14 +88,10 @@ class InteractionTests(unittest.TestCase):
         self.assertEqual(self.scene, Scene(shape="Rectangular prism"))
         self.assertIsNone(self.controls.drag)
 
-    def test_mouse_selection_reset(self):
-        for name in ["Cube", "Pyramid", "Rectangular prism", "Reset"]:
-            self.scene.resize(.2)
-            self.update([event(pygame.MOUSEBUTTONDOWN, button=1,
-                               pos=self.panel.buttons[name].center)])
-            selected = "Rectangular prism" if name == "Reset" else name
-            self.assertEqual(self.scene, Scene(shape=selected))
-            self.assertIsNone(self.controls.drag)
+    def test_unmapped_sidebar_click_does_not_change_scene(self):
+        before = self.scene
+        self.update([event(pygame.MOUSEBUTTONDOWN, button=1, pos=(900, 400))])
+        self.assertEqual(self.scene, before)
 
     def drag(self, button, modifiers=0):
         self.update([event(pygame.MOUSEBUTTONDOWN, button=button, pos=(200, 200)),
@@ -108,6 +104,7 @@ class InteractionTests(unittest.TestCase):
         self.assertGreater(self.scene.angles[1], config.DEFAULT_ANGLES[1])
         self.update([event(pygame.MOUSEBUTTONUP, button=1, pos=(220, 180))])
         self.assertIsNone(self.controls.drag)
+        self.controls.navigation_preset = "RenderX Classic"
         self.drag(3)
         self.assertGreater(self.scene.angles[2], 0)
 
@@ -144,12 +141,12 @@ class InteractionTests(unittest.TestCase):
             self.assertGreater(self.scene.position[1], before[1])
         self.drag(1)
         self.update([event(pygame.MOUSEMOTION, pos=(900, 200), rel=(680, 0))])
+        self.assertEqual(self.controls.drag, "xy")
+        self.update([event(pygame.MOUSEBUTTONUP, button=1, pos=(900, 200))])
         self.assertIsNone(self.controls.drag)
 
     def test_exit_routes(self):
-        for close in [event(pygame.QUIT), event(pygame.KEYDOWN, key=pygame.K_ESCAPE),
-                      event(pygame.MOUSEBUTTONDOWN, button=1,
-                            pos=self.panel.buttons["Exit"].center)]:
+        for close in [event(pygame.QUIT), event(pygame.KEYDOWN, key=pygame.K_ESCAPE)]:
             self.assertFalse(self.update([close]))
 
     def test_render_all_shapes_and_clip(self):
@@ -161,7 +158,6 @@ class InteractionTests(unittest.TestCase):
             self.assertEqual(self.screen.get_at((config.VIEW_WIDTH + 1, 300))[:3],
                              (255, 0, 0))
             self.assertEqual(self.screen.get_clip(), self.screen.get_rect())
-            self.panel.draw(self.screen, self.scene, mesh, 60)
 
     def test_behind_camera_edges_skipped(self):
         count = draw_wireframe(self.screen, make_models()["Cube"], self.scene,
@@ -169,12 +165,9 @@ class InteractionTests(unittest.TestCase):
         self.assertEqual(count, 0)
 
     def test_real_app_loop_each_exit_and_cleanup(self):
-        for close in [event(pygame.QUIT), event(pygame.KEYDOWN, key=pygame.K_ESCAPE),
-                      event(pygame.MOUSEBUTTONDOWN, button=1,
-                            pos=(1277,29))]:
-            frames = [[], [event(pygame.KEYDOWN, key=pygame.K_2)],
-                      [event(pygame.KEYDOWN, key=pygame.K_3)], [close]]
-            with patch("pygame.event.get", side_effect=frames):
-                with patch('renderx.app.initial_size', return_value=(1360, 900)):
-                    run()
-            self.assertFalse(pygame.display.get_init())
+        frames = [[], [event(pygame.KEYDOWN, key=pygame.K_2)],
+                  [event(pygame.KEYDOWN, key=pygame.K_3)], [event(pygame.QUIT)]]
+        with patch("pygame.event.get", side_effect=frames):
+            with patch('renderx.app.initial_size', return_value=(1360, 900)):
+                run(skip_landing=True)
+        self.assertFalse(pygame.display.get_init())

@@ -1,0 +1,4 @@
+[
+  {"frame": 1, "events": [{"type": "click_action", "action": ["help"]}]},
+  {"frame": 3, "events": [{"type": "click_action", "action": ["destination", "Maze"]}]}
+]
