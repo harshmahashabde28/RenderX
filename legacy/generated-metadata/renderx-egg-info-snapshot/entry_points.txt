@@ -1,2 +1,0 @@
-[console_scripts]
-renderx = renderx.__main__:main
