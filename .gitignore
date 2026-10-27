@@ -40,3 +40,12 @@ dist/
 scratch/
 
 # Note: docs/screenshots/ is tracked in repository for documentation and README
+
+# Local working files and generated output (not for the public repo)
+tmp/
+output/
+legacy/
+AGENTS.md
+*.zip
+screenshots/renderx_*.png
+tools/qa/output/
